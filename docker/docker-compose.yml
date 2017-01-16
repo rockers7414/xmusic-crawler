@@ -1,0 +1,12 @@
+version: '2'
+services:
+    xmusic-db:
+        container_name: xmusic-db
+        build:
+            context: ../
+            dockerfile: docker/xmusic-db/Dockerfile
+        image: postgres:xmusic-db
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=idlrocks
+            - POSTGRES_DB=xmusic

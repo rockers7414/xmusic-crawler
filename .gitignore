@@ -1,0 +1,7 @@
+# Common
+*.swp
+tags
+
+# OSX
+*.DS_Store
+
