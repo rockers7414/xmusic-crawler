@@ -8,5 +8,5 @@ services:
         image: postgres:xmusic-db
         environment:
             - POSTGRES_USER=admin
-            - POSTGRES_PASSWORD=idlrocks
+            - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=xmusic
