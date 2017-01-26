@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS datasources (
     name VARCHAR(32) UNIQUE NOT NULL
 );
 
-CREATE UNIQUE INDEX idx_datasource_name ON datasource(name);
+CREATE UNIQUE INDEX idx_datasources_name ON datasources(name);
 
 CREATE TABLE IF NOT EXISTS artists (
     artist_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
