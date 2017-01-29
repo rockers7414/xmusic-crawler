@@ -10,3 +10,14 @@ services:
             - POSTGRES_USER=admin
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=xmusic
+    xmusic-daemon:
+        container_name: xmusic-daemon
+        build:
+            context: .
+            dockerfile: xmusic-daemon/Dockerfile
+        image: python:xmusic-daemon
+        links:
+            - xmusic-db:xmusic-db
+        volumes:
+            - ../daemon:/var/xmusic
+        command: python3 /var/xmusic/daemon.py
