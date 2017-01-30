@@ -16,17 +16,18 @@ The purpose of daemon is used to query the artist, artist's album and the tracks
 
 * Python 3+
 * [pycurl](http://pycurl.io/)
+* [Psycopg](http://initd.org/psycopg/)
 
 ## Quick start
 
-Note: Please make sure you are using the python 3+ as default.
+Note: Please make sure the docker container of `xmusic-db` is started. If the `xmusic-daemon` exist, you can execute below command directly.
 
 ```
-$ ./daemon.py
+$ docker start xmusic-daemon
 ```
 
-or 
+Or you can change the path to `docker/`, then execute the below command.
 
 ```
-$ python3 daemon.py
+$ docker-compose up -d xmusic-daemon
 ```
