@@ -45,13 +45,11 @@ CREATE INDEX idx_albums_popularity ON albums(popularity);
 CREATE TABLE IF NOT EXISTS tracks (
     track_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     album_id UUID REFERENCES albums(album_id),
-    name VARCHAR(32) NOT NULL,
+    name VARCHAR(512) NOT NULL,
     popularity BIGINT,
-    track_number INT,
-    updated_time TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    track_number INT
 );
 
-CREATE TRIGGER update_tracks_modtime BEFORE UPDATE ON tracks FOR EACH ROW EXECUTE PROCEDURE update_modtime();
 CREATE INDEX idx_tracks_name ON tracks(name);
 CREATE INDEX idx_tracks_popularity ON tracks(popularity);
 
@@ -59,8 +57,11 @@ CREATE TABLE IF NOT EXISTS repository (
     track_id UUID REFERENCES tracks(track_id),
     source_id UUID REFERENCES datasources(source_id),
     link VARCHAR(512) UNIQUE NOT NULL,
-    duration_second INT
+    duration_second INT,
+    updated_time TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+CREATE TRIGGER update_repository_modtime BEFORE UPDATE ON repository FOR EACH ROW EXECUTE PROCEDURE update_modtime();
 
 CREATE TABLE IF NOT EXISTS images (
     image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
