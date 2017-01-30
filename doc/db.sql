@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS repository (
 CREATE TABLE IF NOT EXISTS images (
     image_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     width INT NOT NULL,
-    height INT NOT NULL
+    height INT NOT NULL,
+    path VARCHAR(1024) NOT NULL
 );
 
 CREATE INDEX idx_images_name ON images(width);
