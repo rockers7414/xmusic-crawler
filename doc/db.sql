@@ -25,7 +25,6 @@ CREATE UNIQUE INDEX idx_datasources_name ON datasources(name);
 
 CREATE TABLE IF NOT EXISTS artists (
     artist_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    genre_id UUID REFERENCES genres(genre_id),
     name VARCHAR(32) NOT NULL,
     popularity BIGINT
 );
