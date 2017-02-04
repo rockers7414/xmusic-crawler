@@ -31,3 +31,10 @@ Or you can change the path to `docker/`, then execute the below command.
 ```
 $ docker-compose up -d xmusic-daemon
 ```
+Checking the detailed logs.
+
+```
+$ docker-compose logs xmusic-daemon
+```
+
+Or you can use `docker logs` simply.
