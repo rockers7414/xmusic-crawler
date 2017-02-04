@@ -5,11 +5,11 @@ The purpose of daemon is used to query the artist, artist's album and the tracks
 ## Features
 
 * Fetch the artist, artist's album and the tracks of the album from Spotify.
+* Store the data to the PostgreSQL.
 
 ### TODO:
 
 * Fetch the corresponding link of music video from YouTube.
-* Store the data to the PostgreSQL.
 * Prepare the unit test for the daemon's function.
 
 ## Prerequirements
