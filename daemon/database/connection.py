@@ -15,7 +15,7 @@ class Connection:
         conn_string = "postgresql://{0}:{1}@{2}:{3}/{4}".format(
                 username, password, host, port, database)
         self.logger.debug(conn_string)
-        self._engine = create_engine(conn_string)
+        self._engine = create_engine(conn_string, echo = True)
         self.__Session = sessionmaker(bind = self._engine)
         self._session = self.__Session()
 

@@ -1,6 +1,6 @@
 import logging
 
-from .artist import Artist
+from .entity import Artist
 from .connection import Connection
 
 class ArtistRepo:
