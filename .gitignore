@@ -1,5 +1,6 @@
 # Common
 *.swp
+*.log
 tags
 
 # OSX
