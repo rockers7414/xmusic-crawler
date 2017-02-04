@@ -17,6 +17,7 @@ The purpose of daemon is used to query the artist, artist's album and the tracks
 * Python 3+
 * [pycurl](http://pycurl.io/)
 * [Psycopg](http://initd.org/psycopg/)
+* [PostgreSQL version 9.6.1](https://www.postgresql.org/download/)
 
 ## Quick start
 
