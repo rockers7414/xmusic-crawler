@@ -10,6 +10,8 @@ services:
             - POSTGRES_USER=admin
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=xmusic
+        ports:
+            - 5432:5432
     xmusic-daemon:
         container_name: xmusic-daemon
         build:
@@ -20,4 +22,5 @@ services:
             - xmusic-db:xmusic-db
         volumes:
             - ../daemon:/var/xmusic
-        command: python3 /var/xmusic/daemon.py
+        working_dir: /var/xmusic
+        command: python3 xmusic.py
