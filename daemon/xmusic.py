@@ -26,14 +26,14 @@ if __name__ == "__main__":
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
     
-    artist_repo = ArtistRepo(db.getSession())
+    artist_repo = ArtistRepo(db)
+    target = "Ed Sheeran"
 
     """
     Fetching the information of the artist name from data provider.
     """
     musicVideoInfoProvider = SpotifyProvider()
     
-    target = "Ed Sheeran"
     artists = musicVideoInfoProvider.getArtistsByName(target)
     # We got two artist here, but the first artist is more accurate than other.
     # It's the tuple in the list of the artists, the first attribute is artist id 
