@@ -1,10 +1,13 @@
 
 class MusicVideoInfoProvider:
-    def getArtistByName(artist_name):
+    def getArtistsByName(artist_name):
         pass
 
-    def getAlbumsByArtist(artist_id):
+    def getArtistByArtistId(artist_id):
         pass
 
-    def getTracksByAlbum(album_id):
+    def getAlbumsByArtistId(artist_id):
+        pass
+
+    def getTracksByAlbumId(album_id):
         pass
