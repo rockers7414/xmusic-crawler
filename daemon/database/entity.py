@@ -1,3 +1,4 @@
+import uuid
 from .connection import *
 
 from sqlalchemy import Table, Column, ForeignKey
@@ -42,11 +43,12 @@ class Artist(Base):
     genres = relationship("Genre", secondary = artists_genres)
 
     def __init__(self, name, popularity):
+        self.artist_id = str(uuid.uuid4())
         self.name = name
         self.popularity = popularity
 
     def __repr__(self):
-        return "Artist(name={0},popularity={1},genres={2},images={3},albums={4})".format(self.name, self.popularity, self.genres, self.images, self.album)
+        return "Artist(name={0},popularity={1},genres={2},images={3},albums={4})".format(self.name, self.popularity, self.genres, self.images, self.albums)
 
 class Album(Base):
     __tablename__ = "albums"
@@ -55,16 +57,17 @@ class Album(Base):
     name = Column(VARCHAR)
     popularity = Column(INTEGER)
     artist_id = Column(UUID, ForeignKey("artists.artist_id"))
-    artist = relationship("Artist", backref = backref("album", order_by = album_id))
+    artist = relationship("Artist", backref = backref("albums", order_by = album_id))
     images = relationship("Image", secondary = albums_images)
     genres = relationship("Genre", secondary = albums_genres)
 
     def __init__(self, name, popularity):
+        self.album_id = str(uuid.uuid4())
         self.name = name
         self.popularity = popularity
 
     def __repr__(self):
-        return "Album(name={0},populariy={1},genres={2},images={3},tracks={4})".format(self.name, self.popularity, self.genres, self.images, self.track)
+        return "Album(name={0},populariy={1},genres={2},images={3},tracks={4})".format(self.name, self.popularity, self.genres, self.images, self.tracks)
 
 class Track(Base):
     __tablename__ = "tracks"
@@ -74,9 +77,10 @@ class Track(Base):
     popularity = Column(INTEGER)
     track_number = Column(INTEGER)
     album_id = Column(UUID, ForeignKey("albums.album_id"))
-    album = relationship("Album", backref = backref("track", order_by = track_id))
+    album = relationship("Album", backref = backref("tracks", order_by = track_id))
 
     def __init__(self, name, popularity, track_number):
+        self.track_id = str(uuid.uuid4())
         self.name = name
         self.popularity = popularity
         self.track_number = track_number
@@ -93,6 +97,7 @@ class Image(Base):
     path = Column(VARCHAR)
 
     def __init__(self, path, width, height):
+        self.image_id = str(uuid.uuid4())
         self.width = width
         self.height = height
         self.path = path
@@ -107,6 +112,7 @@ class Genre(Base):
     name = Column(VARCHAR)
 
     def __init__(self, name):
+        self.genre_id = str(uuid.uuid4())
         self.name = name
 
     def __repr__(self):
