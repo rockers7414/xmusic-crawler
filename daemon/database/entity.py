@@ -33,6 +33,13 @@ albums_genres = Table(
     Column("genre_id", UUID, ForeignKey("genres.genre_id"))
 )
 
+tracks_genres = Table(
+    "tracks_genres",
+    Base.metadata,
+    Column("track_id", UUID, ForeignKey("tracks.track_id")),
+    Column("genre_id", UUID, ForeignKey("genres.genre_id"))
+)
+
 class Artist(Base):
     __tablename__ = "artists"
 
@@ -78,6 +85,7 @@ class Track(Base):
     track_number = Column(INTEGER)
     album_id = Column(UUID, ForeignKey("albums.album_id"))
     album = relationship("Album", backref = backref("tracks", order_by = track_id))
+    genres = relationship("Genre", secondary = tracks_genres)
 
     def __init__(self, name, popularity, track_number):
         self.track_id = str(uuid.uuid4())
@@ -86,7 +94,7 @@ class Track(Base):
         self.track_number = track_number
 
     def __repr__(self):
-        return "Track(name={0},popularity={1},track_number={2})".format(self.name, self.popularity, self.track_number)
+        return "Track(name={0},popularity={1},track_number={2},genres={3})".format(self.name, self.popularity, self.track_number, self.genres)
 
 class Image(Base):
     __tablename__ = "images"
