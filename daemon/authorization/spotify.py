@@ -23,7 +23,7 @@ class Spotify:
                 grant_type - grant type, set it to “client_credentials”. (Required)
         """
         self.parameter = {
-            grant_type: grant_type
+            "grant_type": grant_type
         }
 
         user_info_bytes = base64.b64encode((client_id + ":" + client_secret).encode())
