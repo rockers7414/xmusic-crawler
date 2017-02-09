@@ -1,6 +1,8 @@
+from io import BytesIO
 from urllib.parse import urlencode
-import requests
+import pycurl
 import base64
+import json
 
 
 class Spotify:
@@ -26,24 +28,31 @@ class Spotify:
             "grant_type": grant_type
         }
 
-        user_info_bytes = base64.b64encode((client_id + ":" + client_secret).encode())
+        user_info_bytes = base64.b64encode(
+            (client_id + ":" + client_secret).encode())
         self.user_info_base64 = user_info_bytes.decode()
 
         self.__authorize()
 
     def __authorize(self):
-        headers = {"Authorization", "Basic " + self.user_info_base64}
+        headers = ["Authorization: Basic " + self.user_info_base64]
+        post_field = urlencode(self.parameter)
 
-        pass
+        buf = BytesIO()
 
-    def display(self):
-        print(self.spotify_authorize_url)
-        print(self.spotify_authorize_url + "?" + urlencode(self.parameter))
-        print(self.user_info_base64)
+        client = pycurl.Curl()
+        client.setopt(client.URL, self.spotify_authorize_url)
+        client.setopt(client.HTTPHEADER, headers)
+        client.setopt(client.POSTFIELDS, post_field)
+        client.setopt(client.WRITEFUNCTION, buf.write)
+        client.setopt(pycurl.SSL_VERIFYPEER, 0)
+        client.perform()
+        client.close()
+
+        self.response = json.loads(buf.getvalue().decode())
+        self.access_token = self.response.get("access_token")
 
     def get_token(self):
-        return "token.."
-
-
-a = Spotify("??", "??")
-a.display()
+        result = self.access_token
+        self.__authorize()
+        return result
