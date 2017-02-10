@@ -180,7 +180,7 @@ class Repository(Base):
         ForeignKey('datasources.source_id'),
         primary_key=True
     )
-    link = Column(VARCHAR, unique=True)
+    link = Column(VARCHAR)
     duration_second = Column(INTEGER)
     updated_time = Column(
         TIMESTAMP(timezone=True),

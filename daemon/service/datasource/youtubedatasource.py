@@ -11,7 +11,8 @@ class YoutubeDatasource(object):
         self._youtubeProvider = YoutubeProvider()
 
     def _process(self, datasource, tracks):
-        for track in tracks[:1]:
+        #TODO: temporarily limit fetching times
+        for track in tracks[:10]:
             try:
                 repo = self._youtubeProvider.getMusicVideo(
                     track.album.artist.name, track.album.name, track.name)

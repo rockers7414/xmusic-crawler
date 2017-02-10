@@ -56,7 +56,7 @@ CREATE INDEX idx_tracks_popularity ON tracks(popularity);
 CREATE TABLE IF NOT EXISTS repository (
     track_id UUID REFERENCES tracks(track_id),
     source_id UUID REFERENCES datasources(source_id),
-    link VARCHAR(512) UNIQUE NOT NULL,
+    link VARCHAR(512) NOT NULL,
     duration_second INT,
     updated_time TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
