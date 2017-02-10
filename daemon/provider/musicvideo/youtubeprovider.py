@@ -38,7 +38,7 @@ class YoutubeProvider(MusicVideoProvider):
         params = {
             'key': self.config['key'],
             'part': 'id,snippet',
-            'order': 'viewCount',
+            'order': 'relevance',
             'type': 'video',
             'maxResults': 3,
             'q': query

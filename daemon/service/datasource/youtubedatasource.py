@@ -14,8 +14,16 @@ class YoutubeDatasource(object):
         #TODO: temporarily limit fetching times
         for track in tracks[:10]:
             try:
+                self.logger.info(
+                    'fetching datasource for artist=%s, album=%s, track=%s',
+                    track.album.artist.name, track.album.name, track.name)
+
                 repo = self._youtubeProvider.getMusicVideo(
                     track.album.artist.name, track.album.name, track.name)
+
+                self.logger.info('done. repo=%s', repo)
+
+                # set relationship
                 repo.track = track
                 datasource.repositories.append(repo)
             except:

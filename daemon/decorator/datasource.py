@@ -23,11 +23,7 @@ class datasource(object):
             tracks = self.datasource_repo.getUnparseTracksByDatasource(
                 datasource)
 
-            self.logger.info('processing... datasource={}, tracks={}'.format(
-                datasource, tracks))
             self._process(datasource, tracks)
-            self.logger.info('done. datasource={}, tracks={}'.format(
-                datasource, tracks))
 
             self.datasource_repo.save(datasource)
 
