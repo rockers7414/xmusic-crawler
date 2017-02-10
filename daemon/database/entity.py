@@ -1,11 +1,11 @@
+import datetime
 import uuid
 
-from sqlalchemy import Column, ForeignKey, PrimaryKeyConstraint, Table
+from decorator.unique import unique
+from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.dialects.postgresql import INTEGER, TIMESTAMP, UUID, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref, relationship
-
-from decorator import Unique
 
 Base = declarative_base()
 
@@ -134,7 +134,8 @@ class Image(Base):
         return "Image(path={0},width={1},height={1})".format(
             self.path, self.width, self.height)
 
-@Unique(
+
+@unique(
     lambda name: name,
     lambda query, name: query.filter(Genre.name == name)
 )
@@ -152,11 +153,15 @@ class Genre(Base):
         return "Genre(name={0})".format(self.name)
 
 
+@unique(
+    lambda name: name,
+    lambda query, name: query.filter(Datasource.name == name)
+)
 class Datasource(Base):
-    __tablename__ = 'datasource'
+    __tablename__ = 'datasources'
 
     source_id = Column(UUID, primary_key=True)
-    name = Column(VARCHAR)
+    name = Column(VARCHAR, unique=True)
 
     def __init__(self, name):
         self.source_id = str(uuid.uuid4())
@@ -168,18 +173,23 @@ class Datasource(Base):
 
 class Repository(Base):
     __tablename__ = 'repository'
-    __table_args__ = (
-        PrimaryKeyConstraint('track_id', 'source_id'),
+
+    track_id = Column(UUID, ForeignKey('tracks.track_id'), primary_key=True)
+    source_id = Column(
+        UUID,
+        ForeignKey('datasources.source_id'),
+        primary_key=True
     )
-
-    track_id = Column(UUID, ForeignKey('tracks.track_id'))
-    source_id = Column(UUID, ForeignKey('datasource.source_id'))
-    link = Column(VARCHAR)
+    link = Column(VARCHAR, unique=True)
     duration_second = Column(INTEGER)
-    updated_time = Column(TIMESTAMP)
+    updated_time = Column(
+        TIMESTAMP(timezone=True),
+        default=datetime.datetime.now)
 
-    def __init__(self, source_id, link, duration_second):
-        self.source_id = source_id
+    datasource = relationship('Datasource', backref=backref('repositories'))
+    track = relationship('Track')
+
+    def __init__(self, link, duration_second):
         self.link = link
         self.duration_second = duration_second
 

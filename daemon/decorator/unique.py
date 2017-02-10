@@ -1,54 +1,67 @@
 from database import Session
 
-def _unique(session, cls, hashfunc, queryfunc, constructor, arg, kw):
-    cache = getattr(session, '_unique_cache', None)
-    if cache is None:
-        session._unique_cache = cache = {}
 
-    key = (cls, hashfunc(*arg, **kw))
-    if key in cache:
-        return cache[key]
-    else:
-        with session.no_autoflush:
-            q = session.query(cls)
-            q = queryfunc(q, *arg, **kw)
-            obj = q.first()
-            if not obj:
-                obj = constructor(*arg, **kw)
-                session.add(obj)
-        cache[key] = obj
-        return obj
+class unique(object):
+    """The utility of unique constraint decorator for entity class
 
-def Unique(hashfunc, queryfunc):
-    def decorate(cls):
-        def _null_init(self, *arg, **kw):
+    :hashfunc: define the function return unique value for hash with the given parameters from constructor
+    :queryfunc: define the function return result from database with given query and parameters from constructor
+    :returns: decorator function
+
+    """
+
+    def __init__(self, hashfunc, queryfunc):
+        self.hashfunc = hashfunc
+        self.queryfunc = queryfunc
+
+    def __call__(self, cls):
+        def _null_init(self, *args, **kwargs):
             pass
-        def __new__(cls, bases, *arg, **kw):
-            # no-op __new__(), called
-            # by the loading procedure
-            if not arg and not kw:
+
+        def __new__(cls, bases, *args, **kwargs):
+            if not args and not kwargs:
                 return object.__new__(cls)
 
             session = Session()
 
-            def constructor(*arg, **kw):
+            def _unique(session, cls, hashfunc, queryfunc, constructor, args, kwargs):
+                cache = getattr(session, '_unique_cache', None)
+                if cache is None:
+                    session._unique_cache = cache = {}
+
+                key = (cls, hashfunc(*args, **kwargs))
+
+                if key not in cache:
+                    with session.no_autoflush:
+                        q = session.query(cls)
+                        obj = queryfunc(q, *args, **kwargs).one_or_none()
+
+                        if not obj:
+                            obj = constructor(*args, **kwargs)
+                            session.add(obj)
+
+                    cache[key] = obj
+
+                return cache[key]
+
+            def constructor(*args, **kwargs):
                 obj = object.__new__(cls)
-                obj._init(*arg, **kw)
+                obj._init(*args, **kwargs)
                 return obj
 
             return _unique(
-                        session,
-                        cls,
-                        hashfunc,
-                        queryfunc,
-                        constructor,
-                        arg, kw
-                   )
+                session,
+                cls,
+                self.hashfunc,
+                self.queryfunc,
+                constructor,
+                args,
+                kwargs
+            )
 
-        # note: cls must be already mapped for this part to work
         cls._init = cls.__init__
         cls.__init__ = _null_init
         cls.__new__ = classmethod(__new__)
+
         return cls
 
-    return decorate

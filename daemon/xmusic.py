@@ -3,9 +3,10 @@
 import configparser
 import logging
 
-from database import db_init, Session
+from database import db_init
 from database.artistrepo import ArtistRepo
 from provider.musicvideoinfo.spotifyprovider import SpotifyProvider
+from service.datasource import Datasource
 
 if __name__ == "__main__":
 
@@ -24,7 +25,7 @@ if __name__ == "__main__":
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    artist_repo = ArtistRepo(Session)
+    artist_repo = ArtistRepo()
 
     """
     Fetching the information of the artist name from data provider.
@@ -66,3 +67,8 @@ if __name__ == "__main__":
     logging.info("Artist(" + target + ") information in the database.")
     logging.debug(artists)
 
+    """
+    Fetching datasource repositories which didn't fetched from current exsit datasource.
+    """
+    datasource = Datasource()
+    datasource.fetch()

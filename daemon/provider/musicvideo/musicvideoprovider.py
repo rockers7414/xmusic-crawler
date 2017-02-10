@@ -1,4 +1,4 @@
 
-class MusicVideoProvider:
-    def getMusicVideo(artist_name, track_name):
-        pass
+class MusicVideoProvider(object):
+    def getMusicVideo(self, artist_name, album_name, track_name):
+        raise NotImplementedError('getMusicVideo is not implemented')
