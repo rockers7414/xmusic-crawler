@@ -70,5 +70,4 @@ if __name__ == "__main__":
     """
     Fetching datasource repositories which didn't fetched from current exsit datasource.
     """
-    datasource = Datasource()
-    datasource.fetch()
+    Datasource.fetch()

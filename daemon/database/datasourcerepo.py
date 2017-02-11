@@ -1,8 +1,7 @@
 import logging
 
+from database.entity import Album, Datasource, Repository, Track
 from decorator.injectdbsession import inject_db_session
-
-from .entity import Album, Datasource, Repository, Track
 
 
 @inject_db_session
@@ -15,7 +14,7 @@ class DatasourceRepo(object):
     def getDatasource(self, name):
         return Datasource(name)
 
-    def getUnparseTracksByDatasource(self, datasource):
+    def getUnfetchedTracksByDatasource(self, datasource):
         query = self._session.query(Track).join(Track.album).filter(
             ~Track.track_id.in_(
                 self._session.query(Repository.track_id).filter(

@@ -5,7 +5,6 @@ from urllib.parse import urlencode
 
 import isodate
 import pycurl
-
 from database.entity import Repository
 from provider.musicvideo.musicvideoprovider import MusicVideoProvider
 
@@ -17,11 +16,11 @@ except ImportError:
 
 class YoutubeProvider(MusicVideoProvider):
     logger = logging.getLogger(__name__)
-    service_host = 'https://www.googleapis.com'
-    video_link_format = 'https://www.youtube.com/watch?v={}'
+    SERVICE_HOST = 'https://www.googleapis.com'
+    VIDEO_LINK_FORMAT = 'https://www.youtube.com/watch?v={}'
 
     def __init__(self):
-        MusicVideoProvider.__init__(self)
+        super().__init__()
         config = configparser.ConfigParser()
         config.read("config.cfg")
         self.config = config['YOUTUBE']
@@ -29,7 +28,7 @@ class YoutubeProvider(MusicVideoProvider):
     def getMusicVideo(self, artist_name, album_name, track_name):
         videoId = self.__searchVideoId('{} {}'.format(artist_name, track_name))
 
-        link = self.video_link_format.format(videoId)
+        link = self.VIDEO_LINK_FORMAT.format(videoId)
         duration_seconds = self.__getVideoDuration(videoId)
 
         return Repository(link, duration_seconds)
@@ -47,9 +46,7 @@ class YoutubeProvider(MusicVideoProvider):
         buf = BytesIO()
 
         client = pycurl.Curl()
-        client.setopt(pycurl.URL,
-                      self.service_host +
-                      '/youtube/v3/search?' +
+        client.setopt(pycurl.URL, self.SERVICE_HOST + '/youtube/v3/search?' +
                       urlencode(params))
         client.setopt(pycurl.WRITEFUNCTION, buf.write)
         client.perform()
@@ -78,8 +75,7 @@ class YoutubeProvider(MusicVideoProvider):
         buf = BytesIO()
 
         client = pycurl.Curl()
-        client.setopt(pycurl.URL,
-                      self.service_host + '/youtube/v3/videos?' +
+        client.setopt(pycurl.URL, self.SERVICE_HOST + '/youtube/v3/videos?' +
                       urlencode(params))
         client.setopt(pycurl.WRITEFUNCTION, buf.write)
         client.perform()
@@ -87,7 +83,6 @@ class YoutubeProvider(MusicVideoProvider):
 
         body = json.loads(buf.getvalue().decode("utf-8"))
         buf.close()
-
 
         if 'error' in body:
             raise Exception('query error: {}'.format(body))

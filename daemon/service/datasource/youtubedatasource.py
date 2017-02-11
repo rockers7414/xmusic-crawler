@@ -1,4 +1,5 @@
 import sys
+import logging
 
 from decorator.datasource import datasource
 from provider.musicvideo.youtubeprovider import YoutubeProvider
@@ -6,13 +7,13 @@ from provider.musicvideo.youtubeprovider import YoutubeProvider
 
 @datasource('youtube')
 class YoutubeDatasource(object):
+    logger = logging.getLogger(__name__)
 
     def __init__(self):
         self._youtubeProvider = YoutubeProvider()
 
     def _process(self, datasource, tracks):
-        #TODO: temporarily limit fetching times
-        for track in tracks[:10]:
+        for track in tracks:
             try:
                 self.logger.info(
                     'fetching datasource for artist=%s, album=%s, track=%s',
