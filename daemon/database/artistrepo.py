@@ -5,7 +5,7 @@ from decorator.injectdbsession import inject_db_session
 from .entity import Artist
 
 
-@inject_db_session
+@inject_db_session('_session')
 class ArtistRepo:
     logger = logging.getLogger(__name__)
 

@@ -4,7 +4,7 @@ from database.entity import Album, Datasource, Repository, Track
 from decorator.injectdbsession import inject_db_session
 
 
-@inject_db_session
+@inject_db_session()
 class DatasourceRepo(object):
     logger = logging.getLogger(__name__)
 

@@ -1,22 +1,24 @@
 from database import Session
 
-class inject_db_session(object):
-    def __init__(self, cls):
-        self._cls = cls
 
-    def __call__(self, *args, **kwargs):
+class inject_db_session(object):
+
+    def __init__(self, attr_name = '_session'):
+        self.attr_name = attr_name
+
+    def __call__(self, cls):
         def _null_init(self, *args, **kwargs):
             pass
 
         def __new__(cls, bases, *args, **kwargs):
             obj = object.__new__(cls)
-            obj._session = Session()
+            setattr(obj, self.attr_name, Session())
             obj._init(*args, **kwargs)
 
             return obj
 
-        self._cls._init = self._cls.__init__
-        self._cls.__init__ = _null_init
-        self._cls.__new__ = classmethod(__new__)
+        cls._init = cls.__init__
+        cls.__init__ = _null_init
+        cls.__new__ = classmethod(__new__)
 
-        return self._cls(*args, **kwargs)
+        return cls

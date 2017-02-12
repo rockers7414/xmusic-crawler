@@ -5,7 +5,7 @@ from decorator.datasource import dic_curr_datasources
 
 
 def dynamic_load():
-    files = glob.glob(dirname(__file__)+"/*.py")
+    files = glob.glob(dirname(__file__) + '/*.py')
 
     for f in files:
         if isfile(f) and not f.endswith('__init__.py'):
@@ -13,6 +13,7 @@ def dynamic_load():
             __import__(module, globals(), locals(), [], 0)
 
 dynamic_load()
+
 
 class Datasource(object):
 
