@@ -32,8 +32,6 @@ class Spotify:
             (client_id + ":" + client_secret).encode())
         self.user_info_base64 = user_info_bytes.decode()
 
-        # self.__authorize()
-
     def __authorize(self):
         headers = ["Authorization: Basic " + self.user_info_base64]
         post_field = urlencode(self.parameter)
@@ -56,6 +54,3 @@ class Spotify:
     def get_token(self):
         self.__authorize()
         return self.access_token
-
-a = Spotify("e9676baa69da445bbd9b691658628b69", "20727079480e4093a14529aefd950ffa")
-print(a.get_token())
