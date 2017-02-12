@@ -22,7 +22,7 @@ class Spotify:
             Parameters:
                 client_id - provider by Spotify when register app. (Required)
                 cleint_secret - provider by Spotify when register app. (Required)
-                grant_type - grant type, set it to “client_credentials”. (Required)
+                grant_type - grant type, set it to “client_credentials”. (Optional)
         """
         self.parameter = {
             "grant_type": grant_type
@@ -32,7 +32,7 @@ class Spotify:
             (client_id + ":" + client_secret).encode())
         self.user_info_base64 = user_info_bytes.decode()
 
-        self.__authorize()
+        # self.__authorize()
 
     def __authorize(self):
         headers = ["Authorization: Basic " + self.user_info_base64]
@@ -48,10 +48,14 @@ class Spotify:
         client.setopt(pycurl.SSL_VERIFYPEER, 0)
         client.perform()
         client.close()
-
+        
         self.response = json.loads(buf.getvalue().decode())
+        buf.close()
         self.access_token = self.response.get("access_token")
 
     def get_token(self):
         self.__authorize()
         return self.access_token
+
+a = Spotify("e9676baa69da445bbd9b691658628b69", "20727079480e4093a14529aefd950ffa")
+print(a.get_token())
