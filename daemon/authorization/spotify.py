@@ -28,7 +28,8 @@ class Spotify:
             "grant_type": grant_type
         }
 
-        user_info_bytes = base64.b64encode((client_id + ":" + client_secret).encode())
+        user_info_bytes = base64.b64encode(
+            (client_id + ":" + client_secret).encode())
         self.user_info_base64 = user_info_bytes.decode()
 
         self.__authorize()
@@ -52,6 +53,5 @@ class Spotify:
         self.access_token = self.response.get("access_token")
 
     def get_token(self):
-        result = self.access_token
         self.__authorize()
-        return result
+        return self.access_token
