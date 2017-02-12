@@ -8,6 +8,7 @@ from database.connection import Connection
 from database.artistrepo import ArtistRepo
 
 from provider.musicvideoinfo.spotifyprovider import SpotifyProvider
+from rpcservice.rpcserver import RPCServer
 
 if __name__ == "__main__":
     
@@ -26,14 +27,16 @@ if __name__ == "__main__":
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
     
-    artist_repo = ArtistRepo(db.getSession())
+    server = RPCServer(config["RPCSERVICE"]["host"], config["RPCSERVICE"]["port"])
+    server.start()
+    
+    """
+    artist_repo = ArtistRepo(db)
+    target = "Ed Sheeran"
 
-    """
-    Fetching the information of the artist name from data provider.
-    """
+    # Fetching the information of the artist name from data provider.
     musicVideoInfoProvider = SpotifyProvider()
     
-    target = "Ed Sheeran"
     artists = musicVideoInfoProvider.getArtistsByName(target)
     # We got two artist here, but the first artist is more accurate than other.
     # It's the tuple in the list of the artists, the first attribute is artist id 
@@ -55,16 +58,12 @@ if __name__ == "__main__":
     logging.info("Fetching(" + target + ") done.")
     logging.debug(artist)
 
-    """
-    Insert the fetching result into xmusic-db.
-    """
+    # Insert the fetching result into xmusic-db.
     logging.info("Store the fetching result(" + target + ") into database.")
     artist_repo.save(artist)
 
-    """
-    Fetching the information of the artist name from xmusic-db.
-    """
+    # Fetching the information of the artist name from xmusic-db.
     artists = artist_repo.getArtistsByName(target)
     logging.info("Artist(" + target + ") information in the database.")
     logging.debug(artists)
-
+    """

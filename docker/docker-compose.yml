@@ -22,5 +22,7 @@ services:
             - xmusic-db:xmusic-db
         volumes:
             - ../daemon:/var/xmusic
+        ports:
+            - 50000:50000
         working_dir: /var/xmusic
         command: python3 xmusic.py
