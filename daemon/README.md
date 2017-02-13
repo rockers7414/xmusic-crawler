@@ -5,12 +5,7 @@ The purpose of daemon is used to query the artist, artist's album and the tracks
 ## Features
 
 * Fetch the artist, artist's album and the tracks of the album from Spotify.
-* Store the data to the PostgreSQL.
-
-### TODO:
-
-* Fetch the corresponding link of music video from YouTube.
-* Prepare the unit test for the daemon's function.
+* Store the above information to the database (PostgreSQL).
 
 ## Prerequirements
 
@@ -18,6 +13,7 @@ The purpose of daemon is used to query the artist, artist's album and the tracks
 * [pycurl](http://pycurl.io/)
 * [Psycopg](http://initd.org/psycopg/)
 * [PostgreSQL version 9.6.1](https://www.postgresql.org/download/)
+* [json-rpc](https://github.com/pavlov99/json-rpc)
 
 ## Quick start
 
@@ -39,3 +35,4 @@ $ docker-compose logs xmusic-daemon
 ```
 
 Or you can use `docker logs` simply.
+Once you figure out the service cannot work normally, maybe you should re-build the docker image, cause we may updated the library or settings in the Dockerfile.
