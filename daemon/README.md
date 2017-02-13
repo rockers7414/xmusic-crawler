@@ -37,3 +37,8 @@ $ docker-compose logs xmusic-daemon
 
 Or you can use `docker logs` simply.
 Once you figure out the service cannot work normally, maybe you should re-build the docker image, cause we may updated the library or settings in the Dockerfile.
+
+## Coding convention
+The coding convention must obey [PEP8](https://www.python.org/dev/peps/pep-0008/).
+
+There is an available tool which name is [autopep8](https://github.com/hhatto/autopep8) for code formatting can be used.
