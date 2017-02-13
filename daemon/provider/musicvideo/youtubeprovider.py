@@ -39,6 +39,7 @@ class YoutubeProvider(MusicVideoProvider):
             'part': 'id,snippet',
             'order': 'relevance',
             'type': 'video',
+            'videoSyndicated': 'true',
             'maxResults': 3,
             'q': query
         }
