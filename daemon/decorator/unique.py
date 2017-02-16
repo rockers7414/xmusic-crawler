@@ -2,15 +2,16 @@ from database import Session
 
 
 class unique(object):
-    """The utility of unique constraint decorator for entity class
-
-    :hashfunc: define the function return unique value for hash with the given parameters from constructor
-    :queryfunc: define the function return result from database with given query and parameters from constructor
-    :returns: decorator function
-
-    """
+    """The utility of unique constraint decorator for entity class"""
 
     def __init__(self, hashfunc, queryfunc):
+        """Constructor
+
+        :hashfunc: define the function return unique value for hash with the given parameters from constructor
+        :queryfunc: define the function return result from database with given query and parameters from constructor
+
+        """
+
         self.hashfunc = hashfunc
         self.queryfunc = queryfunc
 

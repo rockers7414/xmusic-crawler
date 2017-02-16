@@ -1,4 +1,3 @@
-import configparser
 import json
 import logging
 import os
@@ -22,8 +21,6 @@ class YoutubeProvider(MusicVideoProvider):
 
     def __init__(self):
         super().__init__()
-        config = configparser.ConfigParser()
-        config.read("config.cfg")
         self.key = os.environ['YOUTUBE_API_KEY']
 
     def getMusicVideo(self, artist_name, album_name, track_name):
