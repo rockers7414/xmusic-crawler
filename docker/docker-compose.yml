@@ -18,6 +18,8 @@ services:
             context: .
             dockerfile: xmusic-daemon/Dockerfile
         image: python:xmusic-daemon
+        environment:
+            - YOUTUBE_API_KEY=ADD_KEY_HERE
         links:
             - xmusic-db:xmusic-db
         volumes:

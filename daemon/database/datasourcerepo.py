@@ -8,9 +8,6 @@ from decorator.injectdbsession import inject_db_session
 class DatasourceRepo(object):
     logger = logging.getLogger(__name__)
 
-    def __init__(self):
-        pass
-
     def getDatasource(self, name):
         return Datasource(name)
 

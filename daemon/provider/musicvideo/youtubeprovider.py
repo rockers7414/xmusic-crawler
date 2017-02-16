@@ -1,6 +1,7 @@
 import configparser
 import json
 import logging
+import os
 from urllib.parse import urlencode
 
 import isodate
@@ -23,7 +24,7 @@ class YoutubeProvider(MusicVideoProvider):
         super().__init__()
         config = configparser.ConfigParser()
         config.read("config.cfg")
-        self.config = config['YOUTUBE']
+        self.key = os.environ['YOUTUBE_API_KEY']
 
     def getMusicVideo(self, artist_name, album_name, track_name):
         videoId = self.__searchVideoId('{} {}'.format(artist_name, track_name))
@@ -35,7 +36,7 @@ class YoutubeProvider(MusicVideoProvider):
 
     def __searchVideoId(self, query):
         params = {
-            'key': self.config['key'],
+            'key': self.key,
             'part': 'id,snippet',
             'order': 'relevance',
             'type': 'video',
@@ -68,7 +69,7 @@ class YoutubeProvider(MusicVideoProvider):
 
     def __getVideoDuration(self, videoId):
         params = {
-            'key': self.config['key'],
+            'key': self.key,
             'part': 'contentDetails',
             'id': videoId
         }

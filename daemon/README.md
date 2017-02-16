@@ -41,4 +41,5 @@ Once you figure out the service cannot work normally, maybe you should re-build 
 ## Coding convention
 The coding convention must obey [PEP8](https://www.python.org/dev/peps/pep-0008/).
 
-There is an available tool which name is [autopep8](https://github.com/hhatto/autopep8) for code formatting can be used.
+Below is the useful tool for code formatting.
+- [autopep8](https://github.com/hhatto/autopep8)
