@@ -7,5 +7,6 @@ tags
 *.DS_Store
 
 #Python
-*.pyc
-**/__pycache__
+*.py[cod]
+__pycache__/
+.ropeproject/

@@ -13,6 +13,7 @@ The purpose of daemon is used to query the artist, artist's album and the tracks
 * [pycurl](http://pycurl.io/)
 * [Psycopg](http://initd.org/psycopg/)
 * [PostgreSQL version 9.6.1](https://www.postgresql.org/download/)
+* [isodate](https://pypi.python.org/pypi/isodate)
 * [json-rpc](https://github.com/pavlov99/json-rpc)
 
 ## Quick start
@@ -36,3 +37,9 @@ $ docker-compose logs xmusic-daemon
 
 Or you can use `docker logs` simply.
 Once you figure out the service cannot work normally, maybe you should re-build the docker image, cause we may updated the library or settings in the Dockerfile.
+
+## Coding convention
+The coding convention must obey [PEP8](https://www.python.org/dev/peps/pep-0008/).
+
+Below is the useful tool for code formatting.
+- [autopep8](https://github.com/hhatto/autopep8)
