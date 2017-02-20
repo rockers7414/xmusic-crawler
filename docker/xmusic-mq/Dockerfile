@@ -1,0 +1,1 @@
+FROM webcenter/activemq:latest

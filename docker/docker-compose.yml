@@ -22,9 +22,18 @@ services:
             - YOUTUBE_API_KEY=ADD_KEY_HERE
         links:
             - xmusic-db:xmusic-db
+            - xmusic-mq:xmusic-mq
         volumes:
             - ../daemon:/var/xmusic
         ports:
             - 50000:50000
         working_dir: /var/xmusic
         command: python3 xmusic.py
+    xmusic-mq:
+        container_name: xmusic-mq
+        build:
+            context: .
+            dockerfile: xmusic-mq/Dockerfile
+        image: activemq:xmusic-mq
+        ports:
+            - 8161:8161

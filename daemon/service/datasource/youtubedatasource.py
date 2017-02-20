@@ -1,5 +1,5 @@
-import sys
 import logging
+import sys
 
 from decorator.datasource import datasource
 from provider.musicvideo.youtubeprovider import YoutubeProvider

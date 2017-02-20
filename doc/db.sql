@@ -35,7 +35,7 @@ CREATE INDEX idx_artists_popularity ON artists(popularity);
 CREATE TABLE IF NOT EXISTS albums (
     album_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     artist_id UUID REFERENCES artists(artist_id),
-    name VARCHAR(32) NOT NULL,
+    name VARCHAR(512) NOT NULL,
     popularity BIGINT
 );
 
