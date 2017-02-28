@@ -13,6 +13,11 @@ class ArtistRepo:
         query = self._session.query(Artist).filter(Artist.name == artist_name)
         return query.all()
 
+    def get_all_artists(self, index, offset):
+        query = self._session.query(Artist).order_by(
+            Artist.name).limit(offset).offset((index - 1) * offset)
+        return query.all()
+
     def save(self, artist):
         try:
             self._session.add(artist)

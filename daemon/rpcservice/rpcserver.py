@@ -1,23 +1,34 @@
 import json
 import logging
 
-from socketserver import TCPServer, BaseRequestHandler 
+from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
+
 
 @dispatcher.add_method
 def echo(data):
     return data
 
+
+@dispatcher.add_method
+def get_all_artists(index, offset, source):
+    pass
+
+
 class RPCHandler(BaseRequestHandler):
     logger = logging.getLogger(__name__)
 
-    # TODO: should define the message header to prevent the data is not complete.
+    # TODO: should define the message header to prevent the data is not
+    # complete.
     def handle(self):
         self.data = self.request.recv(1024).strip()
-        self.logger.info("{0} request = {1}".format(self.client_address[0], self.data))
+        self.logger.info("{0} request = {1}".format(
+            self.client_address[0], self.data))
         response = JSONRPCResponseManager.handle(self.data, dispatcher)
-        self.logger.info("response for {0} = {1}".format(self.client_address[0], response.json))
+        self.logger.info("response for {0} = {1}".format(
+            self.client_address[0], response.json))
         self.request.sendall(bytes(response.json, "utf-8"))
+
 
 class RPCServer:
     logger = logging.getLogger(__name__)
