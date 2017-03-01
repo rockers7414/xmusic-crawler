@@ -5,15 +5,22 @@ import socket
 import configparser
 
 if __name__ == "__main__":
-    
+
     config = configparser.ConfigParser()
     config.read("config.cfg")
 
     server_addr = ("localhost", 50000)
 
+    # request = json.dumps({
+    #     "method": "echo",
+    #     "params": ["xmusic!"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
     request = json.dumps({
-        "method": "echo",
-        "params": ["xmusic!"],
+        "method": "get_all_artists",
+        "params": [1, 10, "db"],
         "jsonrpc": "2.0",
         "id": 0,
     })

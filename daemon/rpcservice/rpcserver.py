@@ -3,6 +3,8 @@ import logging
 
 from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
+# from decorator.serialize import serializeController
+from database.artistrepo import ArtistRepo
 
 
 @dispatcher.add_method
@@ -11,8 +13,10 @@ def echo(data):
 
 
 @dispatcher.add_method
+# @serializeController("JSON")
 def get_all_artists(index, offset, source):
-    pass
+    artists = ArtistRepo().get_all_artists(1, 10)
+    return artists
 
 
 class RPCHandler(BaseRequestHandler):
