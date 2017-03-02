@@ -41,8 +41,6 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    #TODO enum class (SerializeType) move to enumtype directory ? 
-
 
     # print(DataSourceType.DataBase.value)
 

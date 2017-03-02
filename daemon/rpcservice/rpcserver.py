@@ -3,8 +3,9 @@ import logging
 
 from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
-# from decorator.serialize import serializeController
+from decorator.serialize import serializeController
 from database.artistrepo import ArtistRepo
+from enumtype.datasourcetype import DataSourceType
 
 
 @dispatcher.add_method
@@ -13,10 +14,20 @@ def echo(data):
 
 
 @dispatcher.add_method
-# @serializeController("JSON")
 def get_all_artists(index, offset, source):
-    artists = ArtistRepo().get_all_artists(1, 10)
-    return artists
+
+    @serializeController("JSON")
+    def fromDB():
+        return ArtistRepo().get_all_artists(index, offset)
+
+    @serializeController("JSON")
+    def fromSpotify():
+        pass
+
+    if (source.upper() == DataSourceType.DataBase.value):
+        return fromDB()
+    elif (source.upper() == DataSourceType.Spotify.value):
+        return fromSpotify()
 
 
 class RPCHandler(BaseRequestHandler):

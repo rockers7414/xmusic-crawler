@@ -1,15 +1,6 @@
 import json
 
-from enum import Enum, unique
-
-
-@unique
-class SerializeType(Enum):
-    JSON = "JSON"
-    XML = "XML"
-
-    def describe(self):
-        return self.name, self.value
+from enumtype.serializetype import SerializeType
 
 
 def serializeController(type):
@@ -23,7 +14,7 @@ def serializeController(type):
 
             if(isinstance(value, list)):
                 for _row in value:
-                    jsonObj[key] = serializeRow(_row)                
+                    jsonObj[key] = serializeRow(_row)
             else:
                 jsonObj[key] = value
 
@@ -36,9 +27,10 @@ def serializeController(type):
             jsonArray = []
 
             for row in entitys:
-               jsonArray.append(serializeRow(row))
+                jsonArray.append(serializeRow(row))
 
-            return json.dumps(jsonArray)
+            # return json.dumps(jsonArray)
+            return jsonArray
 
         def toXML():
             pass
@@ -47,5 +39,8 @@ def serializeController(type):
             return toJSON
         elif (type.upper() == SerializeType.XML.value):
             return toXML
+        else
+            raise NotImplementedError(
+                'the serialize type "' + type + '" is unsupported.')
 
     return serialize

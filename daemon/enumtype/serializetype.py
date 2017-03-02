@@ -2,9 +2,9 @@ from enum import Enum, unique
 
 
 @unique
-class DataSourceType(Enum):
-    Spotify = "spotify"
-    DataBase = "db"
+class SerializeType(Enum):
+    JSON = "JSON"
+    XML = "XML"
 
     def describe(self):
         return self.name, self.value

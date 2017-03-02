@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     request = json.dumps({
         "method": "get_all_artists",
-        "params": [1, 10, "db"],
+        "params": [1, 1, "db"],
         "jsonrpc": "2.0",
         "id": 0,
     })
