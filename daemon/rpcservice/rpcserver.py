@@ -6,6 +6,7 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 from decorator.serialize import serializeController
 from database.artistrepo import ArtistRepo
 from enumtype.datasourcetype import DataSourceType
+from rpcservice.artistservice import ArtistService
 
 
 @dispatcher.add_method
@@ -14,20 +15,19 @@ def echo(data):
 
 
 @dispatcher.add_method
-def get_all_artists(index, offset, source):
+def get_artists_list(index=None, offset=None, source=DataSourceType.DataBase.value):
 
-    @serializeController("JSON")
-    def fromDB():
-        return ArtistRepo().get_all_artists(index, offset)
+    artist_repo = ArtistService(source)
+    result = artist_repo.get_artists_list(index, offset)
+    return result
 
-    @serializeController("JSON")
-    def fromSpotify():
-        pass
 
-    if (source.upper() == DataSourceType.DataBase.value):
-        return fromDB()
-    elif (source.upper() == DataSourceType.Spotify.value):
-        return fromSpotify()
+@dispatcher.add_method
+def get_artist(artist_name, source=DataSourceType.DataBase.value):
+
+    artist_repo = ArtistService(source)
+    result = artist_repo.get_artist(artist_name)
+    return result
 
 
 class RPCHandler(BaseRequestHandler):

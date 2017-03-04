@@ -4,8 +4,11 @@ import types
 
 from database import db_init
 from database.artistrepo import ArtistRepo
-from rpcservice.rpcserver import get_all_artists
+from database.albumrepo import AlbumRepo
+from rpcservice.rpcserver import get_artists_list
 from decorator.serialize import *
+from database.entity import Artist
+from rpcservice.artistservice import ArtistService
 
 
 def testController(type):
@@ -26,11 +29,16 @@ def tmp(aa):
 
 @serializeController("JSON")
 def ttt():
-    result = ArtistRepo().get_all_artists(1, 1)
+    # album = AlbumRepo()
+    # result = album.get_albums_by_artist("obama")
+    artist = ArtistRepo()
+    result = artist.get_artist("obama")
+    # result = artist.get_artists_list(1, 1)
     return result
 
 if __name__ == '__main__':
     # print(tmp("AA"))
+    # print("TEST")
 
     config = configparser.ConfigParser()
     config.read("config.cfg")
@@ -41,26 +49,22 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
+    # album = AlbumRepo()
+    # result = album.get_albums_by_artist("obama")
 
-    # print(DataSourceType.DataBase.value)
+    # artist = ArtistRepo()
+    # result = artist.get_artist("obama2")
+    # result = artist.get_artists_list()
 
-    # get_all_artists(None)
-
+    # print("===================")
     # print(ttt())
+    # print(result)
 
-    # artists = ArtistRepo().get_all_artists(1, 1)
-    # print(artists)
+    # print([c.name for c in Artist.__table__.c])
 
-    # for artist in artists:
-    #     for key, value in artist.__dict__.items():
-    #         print(key, value)
-    #         print(type(value))
-    #         print(isinstance(value, list))
-    #         if(isinstance(value, list)):
-    #             for _column in value.__dict__.items():
-    #                 print(_column, "fffffffffffffffff")
-
-    #         print(artist.images)
-    #         for image in artist.images:
-    #             print(image.path)
-    #     print()
+    # for column in Artist.__table__.c:
+    #     print(column.name)
+    # data = DataService("a")
+    data = ArtistService("db", "json")
+    print(data.get_artist("obama"))
+    # print(data.test())

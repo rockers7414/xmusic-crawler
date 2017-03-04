@@ -13,8 +13,10 @@ def serializeController(type):
                 continue
 
             if(isinstance(value, list)):
+                innerJsonObj = []
                 for _row in value:
-                    jsonObj[key] = serializeRow(_row)
+                    innerJsonObj.append(serializeRow(_row))
+                jsonObj[key] = innerJsonObj
             else:
                 jsonObj[key] = value
 
@@ -39,7 +41,7 @@ def serializeController(type):
             return toJSON
         elif (type.upper() == SerializeType.XML.value):
             return toXML
-        else
+        else:
             raise NotImplementedError(
                 'the serialize type "' + type + '" is unsupported.')
 
