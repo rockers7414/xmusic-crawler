@@ -18,12 +18,12 @@ if __name__ == "__main__":
     #     "id": 0,
     # })
 
-    request = json.dumps({
-        "method": "get_artists_list",
-        "params": [1, 10, "db"],
-        "jsonrpc": "2.0",
-        "id": 0,
-    })
+    # request = json.dumps({
+    #     "method": "get_artists_list",
+    #     "params": [1, 1, "db"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
 
     # request = json.dumps({
     #     "method": "get_artist",
@@ -31,6 +31,13 @@ if __name__ == "__main__":
     #     "jsonrpc": "2.0",
     #     "id": 0,
     # })
+
+    request = json.dumps({
+        "method": "get_album",
+        "params": ["obama_album"],
+        "jsonrpc": "2.0",
+        "id": 0,
+    })
 
     print("connect to server({0}:{1})".format("localhost", 50000))
 

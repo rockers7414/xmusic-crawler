@@ -8,7 +8,9 @@ from database.albumrepo import AlbumRepo
 from rpcservice.rpcserver import get_artists_list
 from decorator.serialize import *
 from database.entity import Artist
+
 from rpcservice.artistservice import ArtistService
+from rpcservice.albumservice import AlbumService
 
 
 def testController(type):
@@ -62,9 +64,12 @@ if __name__ == '__main__':
 
     # print([c.name for c in Artist.__table__.c])
 
-    # for column in Artist.__table__.c:
-    #     print(column.name)
-    # data = DataService("a")
-    data = ArtistService("db", "json")
-    print(data.get_artist("obama"))
-    # print(data.test())
+    # data = ArtistService("db", "json")
+    # print(data.get_artist("obama"))
+
+    # album = AlbumRepo()
+    # result = album.get_album("obama_album")
+    # print(result)
+
+    data = AlbumService("db", "json")
+    print(data.get_album("obama_album"))

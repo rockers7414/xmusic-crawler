@@ -2,8 +2,7 @@ import logging
 
 from decorator.injectdbsession import inject_db_session
 from .entity import Artist
-# from sqlalchemy.orm import deferred
-from sqlalchemy.orm import load_only, Load, lazyload
+from sqlalchemy.orm import lazyload
 
 
 @inject_db_session()

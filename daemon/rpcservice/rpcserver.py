@@ -7,6 +7,7 @@ from decorator.serialize import serializeController
 from database.artistrepo import ArtistRepo
 from enumtype.datasourcetype import DataSourceType
 from rpcservice.artistservice import ArtistService
+from rpcservice.albumservice import AlbumService
 
 
 @dispatcher.add_method
@@ -27,6 +28,14 @@ def get_artist(artist_name, source=DataSourceType.DataBase.value):
 
     artist_repo = ArtistService(source)
     result = artist_repo.get_artist(artist_name)
+    return result
+
+
+@dispatcher.add_method
+def get_album(album_name, source=DataSourceType.DataBase.value):
+
+    album_repo = AlbumService(source)
+    result = album_repo.get_album(album_name)
     return result
 
 
