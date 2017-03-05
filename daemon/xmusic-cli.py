@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect(server_addr)
-        sock.sendall(bytes(request, "utf-8"))
+        sock.sendall(bytes(request + "\n", "utf-8"))
         response = str(sock.recv(1024), "utf-8")
 
     print("Sent: {0}".format(request))
