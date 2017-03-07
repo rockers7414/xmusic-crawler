@@ -186,8 +186,14 @@ class Repository(Base):
         TIMESTAMP(timezone=True),
         default=datetime.datetime.now)
 
-    datasource = relationship('Datasource', backref=backref('repositories'))
-    track = relationship('Track', backref=backref('repositories'))
+    datasource = relationship(
+        'Datasource',
+        backref=backref('repositories', lazy='joined')
+    )
+    track = relationship(
+        'Track',
+        backref=backref('repositories', lazy='joined')
+    )
 
     def __init__(self, link, duration_second):
         self.link = link
