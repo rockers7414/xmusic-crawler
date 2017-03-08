@@ -50,13 +50,8 @@ if __name__ == "__main__":
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect(server_addr)
-<<<<<<< HEAD
-        sock.sendall(bytes(request, "utf-8"))
-        response = str(sock.recv(4096), "utf-8")
-=======
         sock.sendall(bytes(request + "\n", "utf-8"))
-        response = str(sock.recv(1024), "utf-8")
->>>>>>> fix-issue-21
+        response = str(sock.recv(4096), "utf-8")
 
     print("Sent: {0}".format(request))
     print("Received: {0}".format(response))

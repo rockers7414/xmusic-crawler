@@ -38,5 +38,8 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    print(ttt())
-    print("!")
+    result = ttt();
+    
+    print("\n\n\n\n")
+    print(result)
+    print(type(result))
