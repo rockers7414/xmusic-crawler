@@ -2,7 +2,6 @@ import logging
 
 from decorator.injectdbsession import inject_db_session
 from .entity import Track, Repository
-from sqlalchemy.orm import eagerload
 
 
 @inject_db_session()

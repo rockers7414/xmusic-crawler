@@ -14,13 +14,17 @@ from rpcservice.artistservice import ArtistService
 from rpcservice.albumservice import AlbumService
 
 
-# @serializeController("JSON")
+@serializeController("JSON")
 def ttt():
     # artist = ArtistRepo()
     # result = artist.get_artists_list()
+    # result = artist.get_artist("obama")
 
-    track = TrackRepo()
-    result = track.get_track_by_name("obama song11")
+    album = AlbumRepo()
+    result = album.get_album("obama_album")
+
+    # track = TrackRepo()
+    # result = track.get_track_by_name("obama song11")
 
     return result
 
