@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from enumtype.serializetype import SerializeType
 
@@ -13,8 +14,13 @@ def serializeController(type):
                 continue
 
             if(isinstance(value, list)):
+                inner_jsonObj = []
                 for _row in value:
-                    jsonObj[key] = serializeRow(_row)
+                     inner_jsonObj.append(serializeRow(_row))
+                jsonObj[key] = inner_jsonObj
+            elif(isinstance(value, datetime.datetime)):
+                time_str = value.strftime('%Y-%m-%d %H:%M:%S')
+                jsonObj[key] = time_str
             else:
                 jsonObj[key] = value
 
