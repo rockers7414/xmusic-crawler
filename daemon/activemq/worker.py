@@ -1,5 +1,4 @@
 import logging
-import time
 import uuid
 
 from service.artist import Artist
@@ -7,28 +6,29 @@ from service.datasource import Datasource
 from stomp import Connection, ConnectionListener
 
 
-class MQClient(object):
-    """docstring for MQClient"""
+class MQWorker(object):
 
-    logger = logging.getLogger(__name__)
+    def __init__(self, host, port, username, password, queue, numofworkers=1):
+        super(MQWorker, self).__init__()
+        self.logger = logging.getLogger(__name__)
+        self.__connections = {}
+        self.__username = username
+        self.__password = password
+        self.__queue = queue
 
-    def __init__(self, host, port, username, password):
-        super(MQClient, self).__init__()
-        self.connections = {}
-
-        for i in range(3):
+        for i in range(numofworkers):
             conn = Connection([(host, port)])
             conn.set_listener('', MessageListener(conn))
-            conn.start()
-            conn.connect(username, password, wait=True)
-            self.connections[uuid.uuid4()] = conn
 
     def start(self):
-        for i, conn in self.connections.items():
-            conn.subscribe('/queue/artist', id=i, ack='client')
+        for i, conn in self.__connections.items():
+            conn.start()
+            conn.connect(self.__username, self.__password, wait=True)
+            self.__connections[uuid.uuid4()] = conn
+            conn.subscribe(self.__queue, id=i, ack='client')
 
     def stop(self):
-        for i, conn in self.connections.items():
+        for i, conn in self.__connections.items():
             conn.disconnect()
             conn.stop()
 

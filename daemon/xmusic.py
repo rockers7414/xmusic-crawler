@@ -3,12 +3,11 @@
 
 import configparser
 import logging
-import signal
-import sys
 
-from activemq.client import MQClient
+from activemq.worker import MQWorker
 from database import db_init
 from rpcservice.rpcserver import RPCServer
+from scheduler import Scheduler
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
@@ -17,7 +16,10 @@ if __name__ == "__main__":
     logging.basicConfig(
         filename=config["LOGGING"]["file"],
         level=config["LOGGING"]["level"],
-        format="%(asctime)s - [%(threadName)s]%(name)s - %(levelname)s - %(message)s")
+        datefmt='%Y-%m-%d %H:%M:%S',
+        format=("[%(asctime)s][%(levelname)s][%(threadName)s][%(name)s] - "
+                "%(message)s")
+    )
 
     db_init(config["DATABASE"]["username"],
             config["DATABASE"]["password"],
@@ -25,17 +27,16 @@ if __name__ == "__main__":
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    mq = MQClient(config["ACTIVEMQ"]["host"],
-                  config["ACTIVEMQ"]["port"],
-                  config["ACTIVEMQ"]["username"],
-                  config["ACTIVEMQ"]["password"])
+    scheduler = Scheduler()
+    scheduler.start()
+
+    mq = MQWorker(config.get("ACTIVEMQ", "host"),
+                  config.get("ACTIVEMQ", "port"),
+                  config.get("ACTIVEMQ", "username"),
+                  config.get("ACTIVEMQ", "password"),
+                  config.get("ACTIVEMQ", "queue"),
+                  config.getint("ACTIVEMQ", "numofworkers"))
     mq.start()
-
-    def handle_signal(signal, frame):
-        mq.stop()
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, handle_signal)
 
     server = RPCServer(config["RPCSERVICE"]["host"],
                        config["RPCSERVICE"]["port"])

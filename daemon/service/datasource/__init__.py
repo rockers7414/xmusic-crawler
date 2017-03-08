@@ -1,18 +1,7 @@
-import glob
-from os.path import basename, dirname, isfile
-
 from decorator.datasource import dic_curr_datasources
+from utils import dynamic_load
 
-
-def dynamic_load():
-    files = glob.glob(dirname(__file__) + '/*.py')
-
-    for f in files:
-        if isfile(f) and not f.endswith('__init__.py'):
-            module = 'service.datasource.{}'.format(basename(f)[:-3])
-            __import__(module, globals(), locals(), [], 0)
-
-dynamic_load()
+dynamic_load(__file__, 'service.datasource')
 
 
 class Datasource(object):
