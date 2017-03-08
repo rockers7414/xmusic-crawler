@@ -112,8 +112,8 @@ class Track(Base):
         self.track_number = track_number
 
     def __repr__(self):
-        return "Track(name={0},popularity={1},track_number={2},genres={3})".format(
-            self.name, self.popularity, self.track_number, self.genres)
+        return "Track(name={0},popularity={1},track_number={2},genres={3},repositories={4})".format(
+            self.name, self.popularity, self.track_number, self.genres, self.repositories)
 
 
 class Image(Base):
@@ -186,8 +186,14 @@ class Repository(Base):
         TIMESTAMP(timezone=True),
         default=datetime.datetime.now)
 
-    datasource = relationship('Datasource', backref=backref('repositories'))
-    track = relationship('Track')
+    datasource = relationship(
+        'Datasource',
+        backref=backref('repositories', lazy='joined')
+    )
+    track = relationship(
+        'Track',
+        backref=backref('repositories', lazy='joined')
+    )
 
     def __init__(self, link, duration_second):
         self.link = link

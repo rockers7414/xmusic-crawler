@@ -1,7 +1,12 @@
 import json
 import logging
+import threading
+import socketserver
 
+<<<<<<< HEAD
 from socketserver import TCPServer, BaseRequestHandler
+=======
+>>>>>>> fix-issue-21
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from decorator.serialize import serializeController
 from enumtype.datasourcetype import DataSourceType
@@ -14,6 +19,7 @@ from rpcservice.trackservice import TrackService
 def echo(data):
     return data
 
+<<<<<<< HEAD
 
 @dispatcher.add_method
 def get_artists_list(index=None, offset=None, source=DataSourceType.DataBase.value):
@@ -63,15 +69,25 @@ class RPCHandler(BaseRequestHandler):
 
 
 class RPCServer:
+=======
+class RPCHandler(socketserver.StreamRequestHandler):
+    logger = logging.getLogger(__name__)
+
+    def handle(self):
+        self.logger.info("Handler thread name = {}/active count = {}".format(threading.current_thread().name, threading.active_count()))
+        self.data = self.rfile.readline().strip()
+        self.logger.info("{0} request = {1}".format(self.client_address[0], self.data))
+        response = JSONRPCResponseManager.handle(self.data, dispatcher)
+        self.logger.info("response for {0} = {1}".format(self.client_address[0], response.json))
+        self.wfile.write(bytes(response.json, "utf-8"))
+
+class RPCServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+>>>>>>> fix-issue-21
     logger = logging.getLogger(__name__)
 
     def __init__(self, host, port):
-        self.host = host
-        self.port = int(port)
+        super().__init__((host, int(port)), RPCHandler)
 
     def start(self):
         self.logger.info("RPCServer is starting.")
-
-        server_addr = (self.host, self.port)
-        with TCPServer(server_addr, RPCHandler) as server:
-            server.serve_forever()
+        self.serve_forever()
