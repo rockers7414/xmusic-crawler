@@ -5,21 +5,31 @@ from enumtype.serializetype import SerializeType
 
 def serializeController(type):
 
+    def serializeRow(row):
+        jsonObj = {}
+
+        for key, value in row.__dict__.items():
+            if key.startswith('_'):
+                continue
+
+            if(isinstance(value, list)):
+                for _row in value:
+                    jsonObj[key] = serializeRow(_row)
+            else:
+                jsonObj[key] = value
+
+        return jsonObj
+
     def serialize(function):
         def toJSON():
             entitys = function()
+
             jsonArray = []
 
             for row in entitys:
+                jsonArray.append(serializeRow(row))
 
-                # if hasattr(row, '_asdict'):
-                #     row_dict = row._asdict()
-                # else:
-                    # row_dict = row.__dict__
-                row_dict = row.__dict__
-                row_dict.pop('_sa_instance_state', None)
-                jsonArray.append(row_dict)
-
+            # return json.dumps(jsonArray)
             return jsonArray
 
         def toXML():
