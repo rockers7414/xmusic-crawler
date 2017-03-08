@@ -3,10 +3,7 @@ import logging
 import threading
 import socketserver
 
-<<<<<<< HEAD
 from socketserver import TCPServer, BaseRequestHandler
-=======
->>>>>>> fix-issue-21
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from decorator.serialize import serializeController
 from enumtype.datasourcetype import DataSourceType
@@ -19,7 +16,6 @@ from rpcservice.trackservice import TrackService
 def echo(data):
     return data
 
-<<<<<<< HEAD
 
 @dispatcher.add_method
 def get_artists_list(index=None, offset=None, source=DataSourceType.DataBase.value):
@@ -53,36 +49,22 @@ def get_track_by_name(track_name, source=DataSourceType.DataBase.value):
     return result
 
 
-class RPCHandler(BaseRequestHandler):
+class RPCHandler(socketserver.StreamRequestHandler):
     logger = logging.getLogger(__name__)
 
-    # TODO: should define the message header to prevent the data is not
-    # complete.
     def handle(self):
-        self.data = self.request.recv(1024).strip()
+        self.logger.info("Handler thread name = {}/active count = {}".format(
+            threading.current_thread().name, threading.active_count()))
+        self.data = self.rfile.readline().strip()
         self.logger.info("{0} request = {1}".format(
             self.client_address[0], self.data))
         response = JSONRPCResponseManager.handle(self.data, dispatcher)
         self.logger.info("response for {0} = {1}".format(
             self.client_address[0], response.json))
-        self.request.sendall(bytes(response.json, "utf-8"))
-
-
-class RPCServer:
-=======
-class RPCHandler(socketserver.StreamRequestHandler):
-    logger = logging.getLogger(__name__)
-
-    def handle(self):
-        self.logger.info("Handler thread name = {}/active count = {}".format(threading.current_thread().name, threading.active_count()))
-        self.data = self.rfile.readline().strip()
-        self.logger.info("{0} request = {1}".format(self.client_address[0], self.data))
-        response = JSONRPCResponseManager.handle(self.data, dispatcher)
-        self.logger.info("response for {0} = {1}".format(self.client_address[0], response.json))
         self.wfile.write(bytes(response.json, "utf-8"))
 
+
 class RPCServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
->>>>>>> fix-issue-21
     logger = logging.getLogger(__name__)
 
     def __init__(self, host, port):

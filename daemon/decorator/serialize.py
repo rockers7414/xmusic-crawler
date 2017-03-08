@@ -17,7 +17,6 @@ def serializeController(type):
                 # else:
                     # row_dict = row.__dict__
                 row_dict = row.__dict__
-
                 row_dict.pop('_sa_instance_state', None)
                 jsonArray.append(row_dict)
 
