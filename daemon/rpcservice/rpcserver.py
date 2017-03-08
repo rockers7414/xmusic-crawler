@@ -4,10 +4,10 @@ import logging
 from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from decorator.serialize import serializeController
-from database.artistrepo import ArtistRepo
 from enumtype.datasourcetype import DataSourceType
 from rpcservice.artistservice import ArtistService
 from rpcservice.albumservice import AlbumService
+from rpcservice.trackservice import TrackService
 
 
 @dispatcher.add_method
@@ -36,6 +36,14 @@ def get_album(album_name, source=DataSourceType.DataBase.value):
 
     album_repo = AlbumService(source)
     result = album_repo.get_album(album_name)
+    return result
+
+
+@dispatcher.add_method
+def get_track_by_name(track_name, source=DataSourceType.DataBase.value):
+
+    track_repo = TrackService(source)
+    result = track_repo.get_track_by_name(track_name)
     return result
 
 

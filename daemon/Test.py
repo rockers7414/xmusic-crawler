@@ -5,6 +5,7 @@ import types
 from database import db_init
 from database.artistrepo import ArtistRepo
 from database.albumrepo import AlbumRepo
+from database.trackrepo import TrackRepo
 from rpcservice.rpcserver import get_artists_list
 from decorator.serialize import *
 from database.entity import Artist
@@ -13,35 +14,17 @@ from rpcservice.artistservice import ArtistService
 from rpcservice.albumservice import AlbumService
 
 
-def testController(type):
-    def wrapped(function):
-        def aa(aa):
-            print(type)
-            origin = function(aa)
-            # print(SerializeType.JSON.value == type.upper())
-            return "fdfs" + origin
-        return aa
-    return wrapped
-
-
-@testController("JSON")
-def tmp(aa):
-    return "hello" + aa
-
-
-@serializeController("JSON")
+# @serializeController("JSON")
 def ttt():
-    # album = AlbumRepo()
-    # result = album.get_albums_by_artist("obama")
-    artist = ArtistRepo()
-    result = artist.get_artist("obama")
-    # result = artist.get_artists_list(1, 1)
+    # artist = ArtistRepo()
+    # result = artist.get_artists_list()
+
+    track = TrackRepo()
+    result = track.get_track_by_name("obama song11")
+
     return result
 
 if __name__ == '__main__':
-    # print(tmp("AA"))
-    # print("TEST")
-
     config = configparser.ConfigParser()
     config.read("config.cfg")
 
@@ -51,25 +34,5 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    # album = AlbumRepo()
-    # result = album.get_albums_by_artist("obama")
-
-    # artist = ArtistRepo()
-    # result = artist.get_artist("obama2")
-    # result = artist.get_artists_list()
-
-    # print("===================")
-    # print(ttt())
-    # print(result)
-
-    # print([c.name for c in Artist.__table__.c])
-
-    # data = ArtistService("db", "json")
-    # print(data.get_artist("obama"))
-
-    # album = AlbumRepo()
-    # result = album.get_album("obama_album")
-    # print(result)
-
-    data = AlbumService("db", "json")
-    print(data.get_album("obama_album"))
+    print(ttt())
+    print("!")

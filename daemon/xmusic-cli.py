@@ -32,9 +32,16 @@ if __name__ == "__main__":
     #     "id": 0,
     # })
 
+    # request = json.dumps({
+    #     "method": "get_album",
+    #     "params": ["obama_album"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
     request = json.dumps({
-        "method": "get_album",
-        "params": ["obama_album"],
+        "method": "get_track_by_name",
+        "params": ["obama song11"],
         "jsonrpc": "2.0",
         "id": 0,
     })

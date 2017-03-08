@@ -9,10 +9,6 @@ from sqlalchemy.orm import lazyload
 class ArtistRepo:
     logger = logging.getLogger(__name__)
 
-    def getArtistsByName(self, artist_name):
-        query = self._session.query(Artist).filter(Artist.name == artist_name)
-        return query.all()
-
     def get_artists_list(self, index=None, offset=None):
         if index is None or offset is None:
             query = self._session.query(Artist).options(

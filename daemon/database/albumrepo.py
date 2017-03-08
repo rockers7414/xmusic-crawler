@@ -14,7 +14,7 @@ class AlbumRepo:
 
     def save(self, album):
         try:
-            self._session.add(Album)
+            self._session.add(album)
             self._session.flush()
             self._session.commit()
         except:
