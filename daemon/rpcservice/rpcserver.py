@@ -2,6 +2,7 @@ import json
 import logging
 import threading
 import socketserver
+import psutil
 
 from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
@@ -62,6 +63,20 @@ def raw_sql(sql):
 
     return execute_sql()
 
+
+@dispatcher.add_method
+def get_server_version():
+    pass
+
+
+@dispatcher.add_method
+def get_server_status():
+    cpu_status = {
+        "cpu" : psutil.cpu_percent(),
+        "memory" : psutil.virtual_memory().percent
+    }
+
+    return cpu_status
 
 class RPCHandler(socketserver.StreamRequestHandler):
     logger = logging.getLogger(__name__)

@@ -2,6 +2,7 @@ import configparser
 import json
 import types
 import uuid
+import psutil
 
 from database import db_init
 from database.artistrepo import ArtistRepo
@@ -42,12 +43,14 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    result = ttt()
-    # print(.__get
-    # print(dir(result))
-    # for row in result:
-    # print(json.dumps(row))
-    # print(row.keys())
-    print("\n\n\n\n")
-    print(result)
-    print(type(result))
+    # result = ttt()
+    # print("\n\n\n\n")
+    # print(result)
+    # print(type(result))
+
+
+    # must install psutil,  update dockerfile 
+    for x in range(3):
+        print(psutil.cpu_percent(interval = 1))
+
+    print(psutil.virtual_memory().percent)
