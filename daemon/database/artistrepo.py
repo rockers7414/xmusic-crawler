@@ -9,14 +9,14 @@ from sqlalchemy.orm import lazyload
 class ArtistRepo:
     logger = logging.getLogger(__name__)
 
-    def get_artists_list(self, index=None, offset=None):
-        if index is None or offset is None:
-            query = self._session.query(Artist).options(
-                lazyload("albums")).order_by(Artist.name)
-        else:
-            query = self._session.query(Artist).options(lazyload("albums")).order_by(
-                Artist.name).limit(offset).offset((index - 1) * offset)
+    def get_artists_by_page(self, index, offset):
+        query = self._session.query(Artist).options(lazyload("albums")).order_by(
+            Artist.name).limit(offset).offset((index - 1) * offset)
+        return query.all()
 
+    def get_artists_list(self):
+        query = self._session.query(Artist).options(
+            lazyload("albums")).order_by(Artist.name)
         return query.all()
 
     def get_artist(self, artist_name):

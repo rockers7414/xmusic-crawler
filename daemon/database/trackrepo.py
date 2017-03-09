@@ -9,8 +9,6 @@ class TrackRepo:
     logger = logging.getLogger(__name__)
 
     def get_track_by_name(self, track_name):
-        # query = self._session.query(Track, Repository).outerjoin(Repository, Repository.track_id == Track.track_id).filter(
-        #     Track.name == track_name)
         query = self._session.query(Track).filter(Track.name == track_name)
         return query.all()
 

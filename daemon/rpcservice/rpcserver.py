@@ -7,9 +7,11 @@ from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from decorator.serialize import serializeController
 from enumtype.datasourcetype import DataSourceType
+from enumtype.serializetype import SerializeType
 from rpcservice.artistservice import ArtistService
 from rpcservice.albumservice import AlbumService
 from rpcservice.trackservice import TrackService
+from database.sqlcommandrepo import SqlCommandRepo
 
 
 @dispatcher.add_method
@@ -47,6 +49,18 @@ def get_track_by_name(track_name, source=DataSourceType.DataBase.value):
     track_repo = TrackService(source)
     result = track_repo.get_track_by_name(track_name)
     return result
+
+
+@dispatcher.add_method
+def raw_sql(sql):
+
+    @serializeController(SerializeType.JSON.value)
+    def execute_sql():
+        sql_repo = SqlCommandRepo()
+        result = sql_repo.execute(sql)
+        return result
+
+    return execute_sql()
 
 
 class RPCHandler(socketserver.StreamRequestHandler):

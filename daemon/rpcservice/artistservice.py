@@ -27,7 +27,10 @@ class ArtistService(DataService):
 
         @serializeController(self.data_type)
         def fromDB():
-            return ArtistRepo().get_artists_list(index, offset)
+            if index is None or offset is None:
+                return ArtistRepo().get_artists_list()
+            else:
+                return ArtistRepo().get_artists_by_page(index, offset)
 
         @serializeController(self.data_type)
         def fromSpotify():
