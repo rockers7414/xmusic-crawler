@@ -43,14 +43,13 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    # result = ttt()
-    # print("\n\n\n\n")
-    # print(result)
+    result = ttt()
+    print("\n\n\n\n")
+    print(result)
     # print(type(result))
 
 
-    # must install psutil,  update dockerfile 
-    for x in range(3):
-        print(psutil.cpu_percent(interval = 1))
+    # for x in range(3):
+    #     print(psutil.cpu_percent(interval = 1))
 
-    print(psutil.virtual_memory().percent)
+    # print(psutil.virtual_memory().percent)

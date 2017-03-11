@@ -10,6 +10,12 @@ def serializeController(type):
     def sqlalchemy_encoder():
         class SqlAlchemyEncoder(json.JSONEncoder):
 
+            def type_convert(self, value):
+                if isinstance(value, datetime.datetime):
+                    return value.strftime('%Y-%m-%d %H:%M:%S')
+                else:
+                    return str(value)
+
             def default(self, obj):
                 fields = {}
                 if isinstance(obj.__class__, DeclarativeMeta):
@@ -23,15 +29,12 @@ def serializeController(type):
                             for _row in value:
                                 inner_jsonObj.append(self.default(_row))
                             fields[key] = inner_jsonObj
-                        elif(isinstance(value, datetime.datetime)):
-                            time_str = value.strftime('%Y-%m-%d %H:%M:%S')
-                            fields[key] = time_str
                         else:
-                            fields[key] = value
+                            fileds[key] = self.type_convert(value)
                 else:
                     # for raw sql
                     for field in obj.keys():
-                        fields[field] = str(getattr(obj, field))
+                        fields[field] = self.type_convert(str(getattr(obj, field)))
 
                 return fields
 
