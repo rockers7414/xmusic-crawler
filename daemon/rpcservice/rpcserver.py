@@ -12,6 +12,7 @@ from enumtype.datasourcetype import DataSourceType
 from dbservice import DBService
 from spotifyservice import SpotifyService
 from rpcservice import RPCService
+from systemservice import SystemService
 
 
 def service_factory(source):
@@ -19,9 +20,9 @@ def service_factory(source):
     if(source == DataSourceType.DataBase.value):
         return DBService()
     elif(source == Datasource.Spotify.value):
-        return SpotifyServicE()
-    else:
-        return RpcService()
+        return SpotifyService()
+    elif(source == Datasource.System.value):
+        return SystemService()
 
 
 @dispatcher.add_method
@@ -59,21 +60,21 @@ def get_track(track_name, source=DataSourceType.DataBase.value):
 
 @dispatcher.add_method
 def raw_sql(sql):
-    service = service_factory()
+    service = service_factory(Datasource.DataBase.value)
     result = service.raw_sql(sql)
     return result
 
 
 @dispatcher.add_method
 def get_server_version():
-    service = service_factory()
+    service = service_factory(DataSourceType.System.value)
     result = service.get_server_version()
     return result
 
 
 @dispatcher.add_method
 def get_server_status():
-    service = service_factory()
+    service = service_factory(DataSourceType.System.value)
     result = service.get_server_status()
     return result
 
