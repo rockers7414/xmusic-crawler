@@ -7,31 +7,14 @@ import psutil
 from database import db_init
 from database.artistrepo import ArtistRepo
 from database.albumrepo import AlbumRepo
-from database.sqlcommandrepo import SqlCommandRepo
 from database.trackrepo import TrackRepo
-from rpcservice.rpcserver import get_artists_list
-from decorator.serialize import *
+
 from database.entity import Artist
 
-from rpcservice.artistservice import ArtistService
-from rpcservice.albumservice import AlbumService
-
-
-@serializeController("JSON")
-def ttt():
-    # artist = ArtistService()
-    # result = artist.get_artists_list()
-    # result = artist.get_artist("obama")
-
-    # album = AlbumRepo()
-    # result = album.get_album("obama_album")
-
-    # track = TrackRepo()
-    # result = track.get_track_by_name("obama song11")
-    # sql = SqlCommandRepo()
-    # result = sql.excute("SELECT * FROM tracks")
-
-    return result
+from rpcservice.rpcservice import RPCService
+from rpcservice.dbservice import DBService
+# from rpcservice.spotifyservice import SpotifyService
+from rpcservice.systemservice import SystemService
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
@@ -43,13 +26,30 @@ if __name__ == '__main__':
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    result = ttt()
-    print("\n\n\n\n")
-    print(result)
-    # print(type(result))
+    # result = ttt()
+    # print("\n\n\n\n")1
+    # print(result)
 
+    # rpc = RPCService()
+    # result = rpc.raw_sql("select * from artists")
+    # print(result)
 
-    # for x in range(3):
-    #     print(psutil.cpu_percent(interval = 1))
+    # rpc = DBService()
+    # result = rpc.get_artist("obama")
+    # print(result)
 
-    # print(psutil.virtual_memory().percent)
+    # print(RPCService().get_server_status())
+
+    # print("\n\n\n")
+    # artistrepo = ArtistRepo()
+    # result = artistrepo.get_artist("obama")
+    # print(result)
+
+    # print("=======================")
+
+    # aa = DBService().get_artist("obama")
+    # print("\n\n\n")
+    # print(aa)
+
+    print(SystemService().get_server_status())
+

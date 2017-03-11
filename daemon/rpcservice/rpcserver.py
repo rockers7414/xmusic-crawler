@@ -6,13 +6,22 @@ import psutil
 
 from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
-from decorator.serialize import serializeController
+
 from enumtype.datasourcetype import DataSourceType
-from enumtype.serializetype import SerializeType
-from rpcservice.artistservice import ArtistService
-from rpcservice.albumservice import AlbumService
-from rpcservice.trackservice import TrackService
-from database.sqlcommandrepo import SqlCommandRepo
+
+from dbservice import DBService
+from spotifyservice import SpotifyService
+from rpcservice import RPCService
+
+
+def service_factory(source):
+    source = source.upper()
+    if(source == DataSourceType.DataBase.value):
+        return DBService()
+    elif(source == Datasource.Spotify.value):
+        return SpotifyServicE()
+    else:
+        return RpcService()
 
 
 @dispatcher.add_method
@@ -21,62 +30,53 @@ def echo(data):
 
 
 @dispatcher.add_method
-def get_artists_list(index=None, offset=None, source=DataSourceType.DataBase.value):
-
-    artist_repo = ArtistService(source)
-    result = artist_repo.get_artists_list(index, offset)
+def get_artists(index=None, offset=None, source=DataSourceType.DataBase):
+    service = service_factory(source)
+    result = service.get_artists(index, offset)
     return result
 
 
 @dispatcher.add_method
 def get_artist(artist_name, source=DataSourceType.DataBase.value):
-
-    artist_repo = ArtistService(source)
-    result = artist_repo.get_artist(artist_name)
+    service = service_factory(source)
+    result = service.get_artist()
     return result
 
 
 @dispatcher.add_method
 def get_album(album_name, source=DataSourceType.DataBase.value):
-
-    album_repo = AlbumService(source)
-    result = album_repo.get_album(album_name)
+    service = service_factory(source)
+    result = service.get_album(album_name)
     return result
 
 
 @dispatcher.add_method
-def get_track_by_name(track_name, source=DataSourceType.DataBase.value):
-
-    track_repo = TrackService(source)
-    result = track_repo.get_track_by_name(track_name)
+def get_track(track_name, source=DataSourceType.DataBase.value):
+    service = service_factory(source)
+    result = service.get_track(track_name)
     return result
 
 
 @dispatcher.add_method
 def raw_sql(sql):
-
-    @serializeController(SerializeType.JSON.value)
-    def execute_sql():
-        sql_repo = SqlCommandRepo()
-        result = sql_repo.execute(sql)
-        return result
-
-    return execute_sql()
+    service = service_factory()
+    result = service.raw_sql(sql)
+    return result
 
 
 @dispatcher.add_method
 def get_server_version():
-    pass
+    service = service_factory()
+    result = service.get_server_version()
+    return result
 
 
 @dispatcher.add_method
 def get_server_status():
-    cpu_status = {
-        "cpu" : psutil.cpu_percent(),
-        "memory" : psutil.virtual_memory().percent
-    }
+    service = service_factory()
+    result = service.get_server_status()
+    return result
 
-    return cpu_status
 
 class RPCHandler(socketserver.StreamRequestHandler):
     logger = logging.getLogger(__name__)

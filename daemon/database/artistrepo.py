@@ -20,7 +20,7 @@ class ArtistRepo:
         return query.all()
 
     def get_artist(self, artist_name):
-        query = self._session.query(Artist).filter(
+        query = self._session.query(Artist).options(lazyload("albums")).filter(
             Artist.name == artist_name)
         return query.all()
 
