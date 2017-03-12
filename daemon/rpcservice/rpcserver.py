@@ -9,20 +9,21 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 
 from enumtype.datasourcetype import DataSourceType
 
-from dbservice import DBService
-from spotifyservice import SpotifyService
-from rpcservice import RPCService
-from systemservice import SystemService
+from .dbservice import DBService
+from .spotifyservice import SpotifyService
+from .systemservice import SystemService
 
 
 def service_factory(source):
     source = source.upper()
     if(source == DataSourceType.DataBase.value):
         return DBService()
-    elif(source == Datasource.Spotify.value):
+    elif(source == DataSourceType.Spotify.value):
         return SpotifyService()
-    elif(source == Datasource.System.value):
+    elif(source == DataSourceType.System.value):
         return SystemService()
+    else
+        return None
 
 
 @dispatcher.add_method
@@ -31,7 +32,7 @@ def echo(data):
 
 
 @dispatcher.add_method
-def get_artists(index=None, offset=None, source=DataSourceType.DataBase):
+def get_artists(index=None, offset=None, source=DataSourceType.DataBase.value):
     service = service_factory(source)
     result = service.get_artists(index, offset)
     return result
@@ -40,7 +41,7 @@ def get_artists(index=None, offset=None, source=DataSourceType.DataBase):
 @dispatcher.add_method
 def get_artist(artist_name, source=DataSourceType.DataBase.value):
     service = service_factory(source)
-    result = service.get_artist()
+    result = service.get_artist(artist_name)
     return result
 
 
@@ -60,7 +61,7 @@ def get_track(track_name, source=DataSourceType.DataBase.value):
 
 @dispatcher.add_method
 def raw_sql(sql):
-    service = service_factory(Datasource.DataBase.value)
+    service = service_factory(DataSourceType.DataBase.value)
     result = service.raw_sql(sql)
     return result
 

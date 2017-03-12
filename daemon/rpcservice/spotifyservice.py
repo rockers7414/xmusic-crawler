@@ -1,4 +1,4 @@
-from rpcservice import RPCService
+from .rpcservice import RPCService
 
 from decorator.singleton import singleton
 from decorator.serialize import json_decorate

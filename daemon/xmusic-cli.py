@@ -19,8 +19,8 @@ if __name__ == "__main__":
     # })
 
     # request = json.dumps({
-    #     "method": "get_artists_list",
-    #     "params": [1, 1, "db"],
+    #     "method": "get_artists",
+    #     "params": [],
     #     "jsonrpc": "2.0",
     #     "id": 0,
     # })
@@ -34,31 +34,31 @@ if __name__ == "__main__":
 
     # request = json.dumps({
     #     "method": "get_album",
-    #     "params": ["obama_album"],
+    #     "params": ["obama album"],
     #     "jsonrpc": "2.0",
     #     "id": 0,
     # })
 
     # request = json.dumps({
-    #     "method": "get_track_by_name",
-    #     "params": ["obama song11"],
+    #     "method": "get_track",
+    #     "params": ["obama song"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
+    # request = json.dumps({
+    #     "method": "raw_sql",
+    #     "params": ["select * from repository"],
     #     "jsonrpc": "2.0",
     #     "id": 0,
     # })
 
     request = json.dumps({
-        "method": "raw_sql",
-        "params": ["select * from repository"],
+        "method": "get_server_status",
+        "params": [],
         "jsonrpc": "2.0",
         "id": 0,
     })
-
-    # request = json.dumps({
-    #     "method": "get_server_status",
-    #     "params": [],
-    #     "jsonrpc": "2.0",
-    #     "id": 0,
-    # })
 
     print("connect to server({0}:{1})".format("localhost", 50000))
 
