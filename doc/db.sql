@@ -16,17 +16,20 @@ CREATE TABLE IF NOT EXISTS genres (
 
 CREATE UNIQUE INDEX idx_genres_name ON genres(name);
 
-CREATE TABLE IF NOT EXISTS datasources (
-    source_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TABLE IF NOT EXISTS providers (
+    provider_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(32) UNIQUE NOT NULL
 );
 
-CREATE UNIQUE INDEX idx_datasources_name ON datasources(name);
+CREATE UNIQUE INDEX idx_providers_name ON providers(name);
 
 CREATE TABLE IF NOT EXISTS artists (
     artist_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider_id UUID REFERENCES providers(provider_id),
+    provider_res_id VARCHAR(256) NOT NULL,
     name VARCHAR(32) NOT NULL,
-    popularity BIGINT
+    popularity BIGINT,
+    UNIQUE(provider_id, provider_res_id)
 );
 
 CREATE INDEX idx_artists_name ON artists(name);
@@ -35,8 +38,11 @@ CREATE INDEX idx_artists_popularity ON artists(popularity);
 CREATE TABLE IF NOT EXISTS albums (
     album_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     artist_id UUID REFERENCES artists(artist_id),
+    provider_id UUID REFERENCES providers(provider_id),
+    provider_res_id VARCHAR(256) NOT NULL,
     name VARCHAR(32) NOT NULL,
     popularity BIGINT
+    UNIQUE(provider_id, provider_res_id)
 );
 
 CREATE INDEX idx_albums_name ON albums(name);
@@ -47,7 +53,8 @@ CREATE TABLE IF NOT EXISTS tracks (
     album_id UUID REFERENCES albums(album_id),
     name VARCHAR(512) NOT NULL,
     popularity BIGINT,
-    track_number INT
+    track_number INT,
+    lyric TEXT
 );
 
 CREATE INDEX idx_tracks_name ON tracks(name);
@@ -55,7 +62,7 @@ CREATE INDEX idx_tracks_popularity ON tracks(popularity);
 
 CREATE TABLE IF NOT EXISTS repository (
     track_id UUID REFERENCES tracks(track_id),
-    source_id UUID REFERENCES datasources(source_id),
+    provider_id UUID REFERENCES providers(provider_id),
     link VARCHAR(512) NOT NULL,
     duration_second INT,
     updated_time TIMESTAMP WITH TIME ZONE DEFAULT NOW()
