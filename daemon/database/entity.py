@@ -3,7 +3,7 @@ import uuid
 
 from decorator.unique import unique
 from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.dialects.postgresql import INTEGER, TIMESTAMP, UUID, VARCHAR
+from sqlalchemy.dialects.postgresql import INTEGER, TIMESTAMP, UUID, VARCHAR, TEXT
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref, relationship
 
@@ -51,7 +51,12 @@ class Artist(Base):
     artist_id = Column(UUID, primary_key=True)
     name = Column(VARCHAR)
     popularity = Column(INTEGER)
+    resource_id = Column(VARCHAR)
 
+    provider = relationship(
+        "Provider",
+        backref=backref("artist", order_by=artist_id, lazy='joined')
+    )
     images = relationship("Image", secondary=artists_images, lazy='joined')
     genres = relationship("Genre", secondary=artists_genres, lazy='joined')
 
@@ -72,9 +77,14 @@ class Album(Base):
     name = Column(VARCHAR)
     popularity = Column(INTEGER)
     artist_id = Column(UUID, ForeignKey("artists.artist_id"))
+    resource_id = Column(VARCHAR)
 
     artist = relationship(
         "Artist",
+        backref=backref("albums", order_by=album_id, lazy='joined')
+    )
+    provider = relationship(
+        "Provider",
         backref=backref("albums", order_by=album_id, lazy='joined')
     )
     images = relationship("Image", secondary=albums_images, lazy='joined')
@@ -97,6 +107,7 @@ class Track(Base):
     name = Column(VARCHAR)
     popularity = Column(INTEGER)
     track_number = Column(INTEGER)
+    lyric = Column(TEXT)
     album_id = Column(UUID, ForeignKey("albums.album_id"))
 
     album = relationship(
@@ -155,20 +166,20 @@ class Genre(Base):
 
 @unique(
     lambda name: name,
-    lambda query, name: query.filter(Datasource.name == name)
+    lambda query, name: query.filter(Provider.name == name)
 )
-class Datasource(Base):
-    __tablename__ = 'datasources'
+class Provider(Base):
+    __tablename__ = 'providers'
 
-    source_id = Column(UUID, primary_key=True)
+    provider_id = Column(UUID, primary_key=True)
     name = Column(VARCHAR, unique=True)
 
     def __init__(self, name):
-        self.source_id = str(uuid.uuid4())
+        self.provider_id = str(uuid.uuid4())
         self.name = name
 
     def __repr__(self):
-        return 'Datasource(name={})'.format(self.name)
+        return 'Provider(name={})'.format(self.name)
 
 
 class Repository(Base):
@@ -177,7 +188,7 @@ class Repository(Base):
     track_id = Column(UUID, ForeignKey('tracks.track_id'), primary_key=True)
     source_id = Column(
         UUID,
-        ForeignKey('datasources.source_id'),
+        ForeignKey('providers.source_id'),
         primary_key=True
     )
     link = Column(VARCHAR)
@@ -186,10 +197,7 @@ class Repository(Base):
         TIMESTAMP(timezone=True),
         default=datetime.datetime.now)
 
-    datasource = relationship(
-        'Datasource',
-        backref=backref('repositories', lazy='joined')
-    )
+    provider = relationship('Provider', backref=backref('repositories'))
     track = relationship(
         'Track',
         backref=backref('repositories', lazy='joined')
