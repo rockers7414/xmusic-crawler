@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS albums (
     provider_id UUID REFERENCES providers(provider_id),
     provider_res_id VARCHAR(256) NOT NULL,
     name VARCHAR(32) NOT NULL,
-    popularity BIGINT
+    popularity BIGINT,
     UNIQUE(provider_id, provider_res_id)
 );
 
