@@ -9,7 +9,7 @@ from sqlalchemy.orm import lazyload
 class ArtistRepo:
     logger = logging.getLogger(__name__)
 
-    def get_artists_by_page(self, index, offset):
+    def get_artists_by_pagecpp(self, index, offset):
         query = self._session.query(Artist).options(lazyload("albums")).order_by(
             Artist.name).limit(offset).offset((index - 1) * offset)
         return query.all()

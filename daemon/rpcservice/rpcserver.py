@@ -32,7 +32,7 @@ def echo(data):
 
 
 @dispatcher.add_method
-def get_artists(index=None, offset=None, source=DataSourceType.DataBase.value):
+def get_artists(index=1, offset=10, source=DataSourceType.DataBase.value):
     service = service_factory(source)
     result = service.get_artists(index, offset)
     return result
