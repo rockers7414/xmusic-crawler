@@ -9,7 +9,7 @@ from .entity import Artist
 class ArtistRepo:
     logger = logging.getLogger(__name__)
 
-    def getArtistsByName(self, artist_name):
+    def get_artists_by_name(self, artist_name):
         query = self._session.query(Artist).filter(Artist.name == artist_name)
         return query.all()
 

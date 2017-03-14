@@ -34,10 +34,10 @@ CREATE TABLE IF NOT EXISTS artists (
     UNIQUE(provider_id, provider_res_id)
 );
 
-CREATE UNIQUE INDEX idx_artists_name ON artists(name);
-CREATE UNIQUE INDEX idx_artists_popularity ON artists(popularity);
-CREATE UNIQUE INDEX idx_artists_provider_id ON artists(provider_id);
-CREATE UNIQUE INDEX idx_artists_provider_res_id ON artists(provider_res_id);
+CREATE INDEX idx_artists_name ON artists(name);
+CREATE INDEX idx_artists_popularity ON artists(popularity);
+CREATE INDEX idx_artists_provider_id ON artists(provider_id);
+CREATE INDEX idx_artists_provider_res_id ON artists(provider_res_id);
 
 CREATE TABLE IF NOT EXISTS albums (
     album_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -49,11 +49,11 @@ CREATE TABLE IF NOT EXISTS albums (
     UNIQUE(provider_id, provider_res_id)
 );
 
-CREATE UNIQUE INDEX idx_albums_name ON albums(name);
-CREATE UNIQUE INDEX idx_albums_artis_id ON albums(artist_id);
-CREATE UNIQUE INDEX idx_albums_popularity ON albums(popularity);
-CREATE UNIQUE INDEX idx_albums_provider_id ON albums(provider_id);
-CREATE UNIQUE INDEX idx_albums_provider_res_id ON albums(provider_res_id);
+CREATE INDEX idx_albums_name ON albums(name);
+CREATE INDEX idx_albums_artis_id ON albums(artist_id);
+CREATE INDEX idx_albums_popularity ON albums(popularity);
+CREATE INDEX idx_albums_provider_id ON albums(provider_id);
+CREATE INDEX idx_albums_provider_res_id ON albums(provider_res_id);
 
 CREATE TABLE IF NOT EXISTS tracks (
     track_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -64,10 +64,10 @@ CREATE TABLE IF NOT EXISTS tracks (
     lyric TEXT
 );
 
-CREATE UNIQUE INDEX idx_tracks_name ON tracks(name);
-CREATE UNIQUE INDEX idx_tracks_album_id ON tracks(album_id);
-CREATE UNIQUE INDEX idx_tracks_popularity ON tracks(popularity);
-CREATE UNIQUE INDEX idx_tracks_lyric ON tracks(lyric);
+CREATE INDEX idx_tracks_name ON tracks(name);
+CREATE INDEX idx_tracks_album_id ON tracks(album_id);
+CREATE INDEX idx_tracks_popularity ON tracks(popularity);
+CREATE INDEX idx_tracks_lyric ON tracks(lyric);
 
 CREATE TABLE IF NOT EXISTS repository (
     track_id UUID REFERENCES tracks(track_id) NOT NULL,
@@ -77,8 +77,8 @@ CREATE TABLE IF NOT EXISTS repository (
     updated_time TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE UNIQUE INDEX idx_repository_track_id ON repository(track_id);
-CREATE UNIQUE INDEX idx_repository_provider_id ON repository(provider_id);
+CREATE INDEX idx_repository_track_id ON repository(track_id);
+CREATE INDEX idx_repository_provider_id ON repository(provider_id);
 
 CREATE TRIGGER update_repository_modtime BEFORE UPDATE ON repository FOR EACH ROW EXECUTE PROCEDURE update_modtime();
 

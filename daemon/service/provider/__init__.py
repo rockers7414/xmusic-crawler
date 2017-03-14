@@ -1,7 +1,7 @@
 import glob
 from os.path import basename, dirname, isfile
 
-from decorator.datasource import dic_curr_datasources
+from decorator.provider import dic_curr_providers
 
 
 def dynamic_load():
@@ -9,15 +9,15 @@ def dynamic_load():
 
     for f in files:
         if isfile(f) and not f.endswith('__init__.py'):
-            module = 'service.datasource.{}'.format(basename(f)[:-3])
+            module = 'service.provider.{}'.format(basename(f)[:-3])
             __import__(module, globals(), locals(), [], 0)
 
 dynamic_load()
 
 
-class Datasource(object):
+class ProviderService(object):
 
     @staticmethod
     def fetch():
-        for name, datasource in dic_curr_datasources.items():
-            datasource().fetch()
+        for name, provider in dic_curr_providers.items():
+            provider().fetch()

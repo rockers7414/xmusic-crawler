@@ -1,22 +1,22 @@
 import sys
 import logging
 
-from decorator.datasource import datasource
+from decorator.provider import provider
 from provider.musicvideo.youtubeprovider import YoutubeProvider
 
 
-@datasource('youtube')
-class YoutubeDatasource(object):
+@provider('youtube')
+class YoutubeProviderService(object):
     logger = logging.getLogger(__name__)
 
     def __init__(self):
         self._youtubeProvider = YoutubeProvider()
 
-    def _process(self, datasource, tracks):
+    def _process(self, provider, tracks):
         for track in tracks:
             try:
                 self.logger.info(
-                    'fetching datasource for artist=%s, album=%s, track=%s',
+                    'fetching artist=%s, album=%s, track=%s',
                     track.album.artist.name, track.album.name, track.name)
 
                 repo = self._youtubeProvider.getMusicVideo(
@@ -26,7 +26,7 @@ class YoutubeDatasource(object):
 
                 # set relationship
                 repo.track = track
-                datasource.repositories.append(repo)
+                provider.repositories.append(repo)
             except:
                 e = sys.exc_info()[1]
                 self.logger.error(e)
