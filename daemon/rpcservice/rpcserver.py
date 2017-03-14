@@ -22,7 +22,7 @@ def service_factory(source):
         return SpotifyService()
     elif(source == DataSourceType.System.value):
         return SystemService()
-    else
+    else:
         return None
 
 

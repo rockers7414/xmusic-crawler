@@ -3,12 +3,12 @@ import json
 
 from rpcservice.rpcservice import RPCService
 
-from decorator.serialize import json_decorate
+from decorator.serialize import serialize
 from decorator.singleton import singleton
 
 
-@singleton
-@json_decorate
+@singleton()
+@serialize()
 class SystemService(RPCService):
 
     def get_server_status(self):

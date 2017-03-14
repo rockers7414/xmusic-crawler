@@ -1,11 +1,11 @@
 from .rpcservice import RPCService
 
 from decorator.singleton import singleton
-from decorator.serialize import json_decorate
+from decorator.serialize import serialize
 
 
-@singleton
-@json_decorate
+@singleton()
+@serialize()
 class SpotifyService(RPCService):
 
     def get_artists(self, index, offset):
