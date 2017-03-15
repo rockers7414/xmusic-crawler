@@ -6,7 +6,6 @@ sys.path.append('../')
 from database import db_init
 from database.artistrepo import ArtistRepo
 from database.entity import Artist
-from database import Session
 
 
 class AritstRepoTestCase(unittest.TestCase):
