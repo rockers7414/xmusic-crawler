@@ -1,13 +1,16 @@
 
 class MusicVideoInfoProvider:
     def getArtistsByName(artist_name):
-        pass
+        raise NotImplementedError('getArtistsByName is not implemented')
 
     def getArtistByArtistId(artist_id):
-        pass
+        raise NotImplementedError('getArtistByArtistId is not implemented')
 
     def getAlbumsByArtistId(artist_id):
-        pass
+        raise NotImplementedError('getAlbumsByArtistId is not implemented')
 
     def getTracksByAlbumId(album_id):
-        pass
+        raise NotImplementedError('getTracksByAlbumId is not implemented')
+
+	def getNewRelease(offset_count,limit):
+        raise NotImplementedError('getNewRelease is not implemented')
