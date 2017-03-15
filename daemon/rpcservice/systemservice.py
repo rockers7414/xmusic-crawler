@@ -22,3 +22,6 @@ class SystemService(RPCService):
 
     def get_server_version(self):
         pass
+
+    def message_q(self):
+        pass
