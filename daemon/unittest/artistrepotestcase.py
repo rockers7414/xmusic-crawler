@@ -24,7 +24,7 @@ class AritstRepoTestCase(unittest.TestCase):
 
         # test data
         self.data_list = []
-        self.data_list.append(Artist("obama", 123))
+        self.data_list.append(Artist("obama II", 123))
         self.data_list.append(Artist("kid kim", -1))
         self.data_list.append(Artist("english tsai", 1))
         self.data_list.append(Artist("horse nine", 223))
@@ -47,8 +47,25 @@ class AritstRepoTestCase(unittest.TestCase):
         except:
             self.fail()
 
-    def test(self):
-        self.assertEqual(1, 1)
+    def test_get_artists_by_page(self):
+        index = 1
+        offset = 5
+        result = self.repo.get_artists_by_page(index, offset)
+        for row in result:
+            self.assertIn(row, self.data_list)
+
+    def test_get_artists_list(self):
+        result = self.repo.get_artists_list()
+
+        for data in self.data_list:
+            self.assertIn(data, result)
+
+    def test_get_artist(self):
+
+        for data in self.data_list:
+            artist_name = data.name
+            result = self.repo.get_artist(artist_name)
+            self.assertIn(data, result)
 
 
 if __name__ == "__main__":
