@@ -4,12 +4,12 @@ from database.albumrepo import AlbumRepo
 from database.trackrepo import TrackRepo
 from database import Session
 
-from decorator.serialize import json_decorate
+from decorator.serialize import serialize
 from decorator.singleton import singleton
 
 
-@singleton
-@json_decorate
+@singleton()
+@serialize()
 class DBService(RPCService):
 
     def get_artists(self, index=None, offset=None):
