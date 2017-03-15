@@ -75,6 +75,7 @@ class SpotifyProvider(MusicVideoInfoProvider):
                     artist.provider = self._provider
                     artist.provider_res_id = artist_data["id"]
 
+                    self.logger.info(artist)
                     artists.append(artist)
 
             if body["artists"]["total"] > body["artists"]["limit"]:

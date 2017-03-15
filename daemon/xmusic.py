@@ -8,7 +8,6 @@ from database.artistrepo import ArtistRepo
 from database.providerrepo import ProviderRepo
 from provider.musicvideoinfo.spotifyprovider import SpotifyProvider
 from rpcservice.rpcserver import RPCServer
-from service.provider import ProviderService
 
 if __name__ == "__main__":
 
@@ -58,12 +57,6 @@ if __name__ == "__main__":
     logging.info("Artist(" + target + ") information in the database.")
     logging.debug(artists)
 
-    """
-    Fetching datasource repositories which didn't fetched from current exsit
-    datasource.
-    """
-    #  ProviderService.fetch()
-
-    #  server = RPCServer(config["RPCSERVICE"]["host"],
-    #  config["RPCSERVICE"]["port"])
-    #  server.start()
+    server = RPCServer(config["RPCSERVICE"]["host"],
+                       config["RPCSERVICE"]["port"])
+    server.start()
