@@ -1,12 +1,13 @@
 import json
 import logging
-import os
 from urllib.parse import urlencode
 
 import isodate
 import pycurl
 from database.entity import Repository
 from provider.musicvideo.musicvideoprovider import MusicVideoProvider
+
+from config import Config
 
 try:
     from io import BytesIO
@@ -21,7 +22,7 @@ class YoutubeProvider(MusicVideoProvider):
 
     def __init__(self):
         super().__init__()
-        self.key = os.environ['YOUTUBE_API_KEY']
+        self.key = Config.youtube_api_key
 
     def getMusicVideo(self, artist_name, album_name, track_name):
         videoId = self.__searchVideoId('{} {}'.format(artist_name, track_name))
