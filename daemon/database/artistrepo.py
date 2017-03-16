@@ -19,7 +19,7 @@ class ArtistRepo:
             lazyload("albums")).order_by(Artist.name)
         return query.all()
 
-    def get_artist(self, artist_name):
+    def get_artist_by_name(self, artist_name):
         query = self._session.query(Artist).options(lazyload("albums")).filter(
             Artist.name == artist_name)
         return query.all()

@@ -50,9 +50,9 @@ class serialize(object):
 
     def json_serialize(self, func):
         def wrapper(*args, **kwargs):
-            entitys = func(*args, **kwargs)
+            entities = func(*args, **kwargs)
             json_array = []
-            for row in entitys:
+            for row in entities:
                 json_str = json.dumps(
                     row, cls=SqlAlchemyEncoder)
                 json_array.append(json.loads(json_str))
