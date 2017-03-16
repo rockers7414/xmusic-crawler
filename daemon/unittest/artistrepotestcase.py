@@ -59,11 +59,11 @@ class AritstRepoTestCase(unittest.TestCase):
         for data in self.data_list:
             self.assertIn(data, result)
 
-    def test_get_artist(self):
+    def test_get_artist_by_name(self):
 
         for data in self.data_list:
             artist_name = data.name
-            result = self.repo.get_artist(artist_name)
+            result = self.repo.get_artist_by_name(artist_name)
             self.assertIn(data, result)
 
 

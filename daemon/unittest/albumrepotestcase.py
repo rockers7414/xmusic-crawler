@@ -45,10 +45,10 @@ class AlbumRepoTestCase(unittest.TestCase):
         except:
             self.fail()
 
-    def test_get_album(self):
+    def test_get_album_by_name(self):
         for data in self.data_list:
             album_name = data.name
-            result = self.repo.get_album(album_name)
+            result = self.repo.get_album_by_name(album_name)
             self.assertIn(data, result)
 
 if __name__ == "__main__":
