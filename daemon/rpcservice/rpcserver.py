@@ -1,14 +1,80 @@
 import logging
 import threading
 import socketserver
+import psutil
 
 from struct import pack, unpack
 from jsonrpc import JSONRPCResponseManager, dispatcher
+from enumtype.datasourcetype import DataSourceType
+from .dbservice import DBService
+from .spotifyservice import SpotifyService
+from .systemservice import SystemService
+
+
+def service_factory(source):
+    source = source.upper()
+    if(source == DataSourceType.DataBase.value):
+        return DBService()
+    elif(source == DataSourceType.Spotify.value):
+        return SpotifyService()
+    elif(source == DataSourceType.System.value):
+        return SystemService()
+    else:
+        return None
 
 
 @dispatcher.add_method
 def echo(data):
     return data
+
+
+@dispatcher.add_method
+def get_artists(index=1, offset=10, source=DataSourceType.DataBase.value):
+    service = service_factory(source)
+    result = service.get_artists(index, offset)
+    return result
+
+
+@dispatcher.add_method
+def get_artist(artist_name, source=DataSourceType.DataBase.value):
+    service = service_factory(source)
+    result = service.get_artist(artist_name)
+    return result
+
+
+@dispatcher.add_method
+def get_album(album_name, source=DataSourceType.DataBase.value):
+    service = service_factory(source)
+    result = service.get_album(album_name)
+    return result
+
+
+@dispatcher.add_method
+def get_track(track_name, source=DataSourceType.DataBase.value):
+    service = service_factory(source)
+    result = service.get_track(track_name)
+    return result
+
+
+@dispatcher.add_method
+def raw_sql(sql):
+    service = service_factory(DataSourceType.DataBase.value)
+    result = service.raw_sql(sql)
+    return result
+
+
+@dispatcher.add_method
+def get_server_version():
+    service = service_factory(DataSourceType.System.value)
+    result = service.get_server_version()
+    return result
+
+
+@dispatcher.add_method
+def get_server_status():
+    service = service_factory(DataSourceType.System.value)
+    result = service.get_server_status()
+    return result
 
 
 class MessageHeader(object):

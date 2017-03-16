@@ -12,9 +12,51 @@ if __name__ == "__main__":
 
     server_addr = ("localhost", 50000)
 
+    # request = json.dumps({
+    #     "method": "echo",
+    #     "params": ["xmusic!"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
+    # request = json.dumps({
+    #     "method": "get_artists",
+    #     "params": [],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
+    # request = json.dumps({
+    #     "method": "get_artist",
+    #     "params": ["obama"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
+    # request = json.dumps({
+    #     "method": "get_album",
+    #     "params": ["obama album"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
+    # request = json.dumps({
+    #     "method": "get_track",
+    #     "params": ["obama song"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
+    # request = json.dumps({
+    #     "method": "raw_sql",
+    #     "params": ["select * from repository"],
+    #     "jsonrpc": "2.0",
+    #     "id": 0,
+    # })
+
     request = json.dumps({
         "method": "echo",
-        "params": ["xmusic!"*1000],
+        "params": ["xmusic!" * 1000],
         "jsonrpc": "2.0",
         "id": 0,
     })
