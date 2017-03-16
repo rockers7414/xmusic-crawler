@@ -9,7 +9,7 @@ from sqlalchemy.orm import lazyload
 class AlbumRepo:
     logger = logging.getLogger(__name__)
 
-    def get_album(self, album_name):
+    def get_album_by_name(self, album_name):
         query = self._session.query(Album).options(
             lazyload("tracks.repositories")).filter(Album.name == album_name)
         return query.all()

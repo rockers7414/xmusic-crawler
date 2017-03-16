@@ -18,11 +18,11 @@ class DBService(RPCService):
         else:
             return ArtistRepo().get_artists_by_page(index, offset)
 
-    def get_artist(self, artist_name):
-        return ArtistRepo().get_artist(artist_name)
+    def get_artist_by_name(self, artist_name):
+        return ArtistRepo().get_artist_by_name(artist_name)
 
-    def get_album(self, album_name):
-        return AlbumRepo().get_album(album_name)
+    def get_album_by_name(self, album_name):
+        return AlbumRepo().get_album_by_name(album_name)
 
     def get_track(self, track_name):
         return TrackRepo().get_track_by_name(track_name)
