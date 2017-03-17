@@ -7,7 +7,8 @@ import pycurl
 from database.entity import Repository
 from provider.musicvideo.musicvideoprovider import MusicVideoProvider
 
-import configparser
+from config import Config
+
 
 try:
     from io import BytesIO
@@ -23,9 +24,7 @@ class YoutubeProvider(MusicVideoProvider):
 
     def __init__(self):
         super().__init__()
-        config = configparser.ConfigParser()
-        config.read("config.cfg")
-        self.key = config["YOUTUBE"]["apikey"]
+        self.key = Config.youtube_api_key
 
     def get_music_video(self, artist_name, album_name, track_name):
         video_id = self.__search_video_id(("{0} {1}")
