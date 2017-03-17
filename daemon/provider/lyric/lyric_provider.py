@@ -1,4 +1,4 @@
 
 class LyricProvider:
-    def getLyric(artist_name, track_name):
-        pass
+    def get_lyric(artist_name, track_name):
+        raise NotImplementedError("get_lyric is not implemented")

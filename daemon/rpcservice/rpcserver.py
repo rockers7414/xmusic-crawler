@@ -1,14 +1,10 @@
-import json
 import logging
 import threading
 import socketserver
 import psutil
 
-from socketserver import TCPServer, BaseRequestHandler
 from jsonrpc import JSONRPCResponseManager, dispatcher
-
 from enumtype.datasourcetype import DataSourceType
-
 from .dbservice import DBService
 from .spotifyservice import SpotifyService
 from .systemservice import SystemService
