@@ -2,14 +2,17 @@ from database import Session
 
 
 class unique(object):
-    """The utility of unique constraint decorator for entity class"""
+    """
+    The utility of unique constraint decorator for entity class.
+    """
 
     def __init__(self, hashfunc, queryfunc):
-        """Constructor
-
-        :hashfunc: define the function return unique value for hash with the given parameters from constructor
-        :queryfunc: define the function return result from database with given query and parameters from constructor
-
+        """
+        Args:
+            hashfunc (function): Define the function which return unique value
+                for hashing with the given parameters.
+            queryfunc (function): Define the function which return result from
+                database with the given query and parameters.
         """
 
         self.hashfunc = hashfunc
@@ -25,8 +28,9 @@ class unique(object):
 
             session = Session()
 
-            def _unique(session, cls, hashfunc, queryfunc, constructor, args, kwargs):
-                cache = getattr(session, '_unique_cache', None)
+            def _unique(session, cls, hashfunc, queryfunc, constructor, args,
+                        kwargs):
+                cache = getattr(session, "_unique_cache", None)
                 if cache is None:
                     session._unique_cache = cache = {}
 
@@ -65,4 +69,3 @@ class unique(object):
         cls.__new__ = classmethod(__new__)
 
         return cls
-
