@@ -1,30 +1,30 @@
 import logging
 
-from database.entity import Album, Datasource, Repository, Track
+from database.entity import Provider, Repository, Track
 from decorator.injectdbsession import inject_db_session
 
 
 @inject_db_session()
-class DatasourceRepo(object):
+class ProviderRepo(object):
     logger = logging.getLogger(__name__)
 
-    def getDatasource(self, name):
-        return Datasource(name)
+    def get_provider(self, name):
+        return Provider(name)
 
-    def getUnfetchedTracksByDatasource(self, datasource):
+    def get_unfetched_tracks_by_provider(self, provider):
         query = self._session.query(Track).join(Track.album).filter(
             ~Track.track_id.in_(
                 self._session.query(Repository.track_id).filter(
-                    Repository.datasource == datasource
+                    Repository.provider == provider
                 )
             )
         )
 
         return query.all()
 
-    def save(self, datasource):
+    def save(self, provider):
         try:
-            self._session.add(datasource)
+            self._session.add(provider)
             self._session.flush()
             self._session.commit()
         except:

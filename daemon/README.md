@@ -43,3 +43,7 @@ The coding convention must obey [PEP8](https://www.python.org/dev/peps/pep-0008/
 
 Below is the useful tool for code formatting.
 - [autopep8](https://github.com/hhatto/autopep8)
+
+## Documentation convention
+Please follow below sample.
+- [Google Style Python Docstrings](http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html)

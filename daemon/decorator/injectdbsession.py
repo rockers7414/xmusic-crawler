@@ -3,7 +3,7 @@ from database import Session
 
 class inject_db_session(object):
 
-    def __init__(self, attr_name = '_session'):
+    def __init__(self, attr_name="_session"):
         self.attr_name = attr_name
 
     def __call__(self, cls):
