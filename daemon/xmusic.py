@@ -5,9 +5,9 @@ import logging
 
 from database import db_init
 from database.artistrepo import ArtistRepo
+from database.providerrepo import ProviderRepo
 from provider.musicvideoinfo.spotifyprovider import SpotifyProvider
 from rpcservice.rpcserver import RPCServer
-from service.datasource import Datasource
 
 if __name__ == "__main__":
 
@@ -26,32 +26,22 @@ if __name__ == "__main__":
             config["DATABASE"]["port"],
             config["DATABASE"]["database"])
 
-    server = RPCServer(config["RPCSERVICE"]["host"],
-                       config["RPCSERVICE"]["port"])
-    server.start()
-
-    """
     artist_repo = ArtistRepo()
     target = "Ed Sheeran"
 
     # Fetching the information of the artist name from data provider.
     musicVideoInfoProvider = SpotifyProvider()
+    musicVideoInfoProvider.provider = ProviderRepo().get_provider("spotify")
 
-    artists = musicVideoInfoProvider.getArtistsByName(target)
-    # We got two artist here, but the first artist is more accurate than other.
-    # It's the tuple in the list of the artists, the first attribute is artist id
-    # that given by provider, and the second attribute is the entity object of
-    # Artist.
-    artist_id = artists[0][0]
-    artist = artists[0][1]
+    artists = musicVideoInfoProvider.get_artists_by_name(target)
+    artist = artists[0]
     artist.albums = []
 
-    # It's the tuple in the list of albums, the first attribute is the album id
-    # that given by provider, and the second attribute is the entity object of
-    # Album.
-    albums = musicVideoInfoProvider.getAlbumsByArtistId(artist_id)
-    for (album_id, album) in albums:
-        tracks = musicVideoInfoProvider.getTracksByAlbumId(album_id)
+    albums = musicVideoInfoProvider \
+        .get_albums_by_artist_id(artist.provider_res_id)
+    for album in albums:
+        tracks = musicVideoInfoProvider.get_tracks_by_album_id(
+            album.provider_res_id)
         album.tracks = tracks
         artist.albums.append(album)
 
@@ -63,12 +53,10 @@ if __name__ == "__main__":
     artist_repo.save(artist)
 
     # Fetching the information of the artist name from xmusic-db.
-    artists = artist_repo.getArtistsByName(target)
+    artists = artist_repo.get_artists_by_name(target)
     logging.info("Artist(" + target + ") information in the database.")
     logging.debug(artists)
-    """
 
-    """
-    Fetching datasource repositories which didn't fetched from current exsit datasource.
-    """
-    Datasource.fetch()
+    server = RPCServer(config["RPCSERVICE"]["host"],
+                       config["RPCSERVICE"]["port"])
+    server.start()
