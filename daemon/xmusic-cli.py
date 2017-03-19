@@ -69,7 +69,7 @@ class XMusicShell(cmd.Cmd):
             parser = getattr(self, "parser_" + prog)
             args = parser.parse_args(shlex.split(arg)[1:])
             response = self.client.send_rpcrequest(prog, vars(args))
-            print(response)
+            print(json.dumps(json.loads(response), indent=4))
         except:
             self.logger.exception("Got exception in _process.")
             pass
