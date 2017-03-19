@@ -1,0 +1,62 @@
+[
+  {
+    "method": "echo",
+    "description": "Echo service",
+    "parameters": [
+      {
+        "name": "data",
+        "type": "str",
+        "description": "The string will return.",
+        "required": true
+      }
+    ]
+  },
+  {
+    "method": "Get Artist",
+    "description": "Get the artist by name.",
+    "parameters": [
+      {
+        "name": "artist_name",
+        "type": "str",
+        "description": "The name of artist.",
+        "required": true
+      },
+      {
+        "name": "source",
+        "type": "str",
+        "description": "The source of the data.",
+        "default": "db",
+        "choices": ["db", "spotify"],
+        "required": false
+      }
+    ]
+  },
+  {
+    "method": "Get Artists",
+    "description": "Get list of the artists.",
+    "parameters": [
+      {
+        "name": "index",
+        "type": "int",
+        "description": "The index of page.",
+        "default": 1,
+        "required": false
+      },
+      {
+        "name": "offset",
+        "type": "int",
+        "description": "The number of artist in the page.",
+        "default": 10,
+        "required": false
+      },
+      {
+        "name": "source",
+        "type": "str",
+        "description": "The source of the data.",
+        "default": "db",
+        "choices": ["db", "spotify"],
+        "required": false
+      }
+    ]
+  }
+]
