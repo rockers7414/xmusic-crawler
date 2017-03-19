@@ -4,6 +4,7 @@ import cmd
 import json
 import uuid
 import socket
+import shlex
 import argparse
 import readline
 import logging
@@ -29,6 +30,7 @@ class XMusicRPCClient(object):
             "jsonrpc": "2.0",
             "id": str(uuid.uuid4())
         }
+        print(json.dumps(request))
         self.sock.sendall(MessageHeader.create(
             len(json.dumps(request))) + bytes(json.dumps(request), "UTF-8"))
 
@@ -65,7 +67,7 @@ class XMusicShell(cmd.Cmd):
         try:
             prog = arg.split(" ")[0]
             parser = getattr(self, "parser_" + prog)
-            args = parser.parse_args(arg.split(" ")[1:])
+            args = parser.parse_args(shlex.split(arg)[1:])
             response = self.client.send_rpcrequest(prog, vars(args))
             print(response)
         except:
