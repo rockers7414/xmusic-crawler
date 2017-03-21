@@ -32,12 +32,18 @@ class AritstRepoTestCase(unittest.TestCase):
         self.data_list = []
         artist = Artist("obama II", 123)
         artist.provider = self.provider
+        artist.provider_res_id = "res_id"
         self.data_list.append(artist)
-        # self.data_list.append(Artist("kid kim", -1))
-        # self.data_list.append(Artist("english tsai", 1))
-        # self.data_list.append(Artist("horse nine", 223))
-        # self.data_list.append(Artist("big gg", 222))
-        # self.data_list.append(Artist("iiii", 0))
+
+        artist2 = Artist("kid kim", -1)
+        artist2.provider = self.provider
+        artist2.provider_res_id = "res_id2"
+        self.data_list.append(artist2)
+
+        artist3 = Artist("english tsai", 1)
+        artist3.provider = self.provider
+        artist3.provider_res_id = "res_id3"
+        self.data_list.append(artist3)
 
         try:
             for data in self.data_list:
@@ -57,20 +63,23 @@ class AritstRepoTestCase(unittest.TestCase):
         offset = 5
         result = self.repo.get_artists_by_page(index, offset)
         for row in result:
-            self.assertIn(row, self.data_list)
+            with self.subTest(row=row):
+                self.assertIn(row, self.data_list)
 
     def test_get_artists_list(self):
         result = self.repo.get_artists_list()
 
         for data in self.data_list:
-            self.assertIn(data, result)
+            with self.subTest(data=data):
+                self.assertIn(data, result)
 
     def test_get_artist_by_name(self):
 
         for data in self.data_list:
             artist_name = data.name
-            result = self.repo.get_artist_by_name(artist_name)
-            self.assertIn(data, result)
+            with self.subTest(data=data):
+                result = self.repo.get_artist_by_name(artist_name)
+                self.assertIn(data, result)
 
 
 if __name__ == "__main__":
