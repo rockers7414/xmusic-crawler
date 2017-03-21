@@ -5,6 +5,7 @@ import sys
 sys.path.append('../')
 from database import db_init
 from database.artistrepo import ArtistRepo
+from database.providerrepo import ProviderRepo
 from database.entity import Artist
 
 
@@ -21,17 +22,22 @@ class AritstRepoTestCase(unittest.TestCase):
                 config["DATABASE"]["port"],
                 config["DATABASE"]["database"])
 
-        # test data
-        self.data_list = []
-        self.data_list.append(Artist("obama II", 123))
-        self.data_list.append(Artist("kid kim", -1))
-        self.data_list.append(Artist("english tsai", 1))
-        self.data_list.append(Artist("horse nine", 223))
-        self.data_list.append(Artist("big gg", 222))
-        self.data_list.append(Artist("iiii", 0))
-
         # repo
         self.repo = ArtistRepo()
+        self.provider_repo = ProviderRepo()
+
+        self.provider = ProviderRepo().get_provider("youtube")
+
+        # test data
+        self.data_list = []
+        artist = Artist("obama II", 123)
+        artist.provider = self.provider
+        self.data_list.append(artist)
+        # self.data_list.append(Artist("kid kim", -1))
+        # self.data_list.append(Artist("english tsai", 1))
+        # self.data_list.append(Artist("horse nine", 223))
+        # self.data_list.append(Artist("big gg", 222))
+        # self.data_list.append(Artist("iiii", 0))
 
         try:
             for data in self.data_list:
