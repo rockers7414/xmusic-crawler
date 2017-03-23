@@ -1,31 +1,22 @@
 #!/usr/bin/env python
 
-import configparser
-import logging
-
 from database import db_init
 from database.artistrepo import ArtistRepo
 from database.providerrepo import ProviderRepo
 from provider.musicvideoinfo.spotifyprovider import SpotifyProvider
 from rpcservice.rpcserver import RPCServer
+from config import Config
 
 if __name__ == "__main__":
 
-    config = configparser.ConfigParser()
-    config.read("config.cfg")
+    config = Config("xmusic.cfg")
+    db_init(config.db_username,
+            config.db_password,
+            config.db_host,
+            config.db_port,
+            config.db_database)
 
-    logging.basicConfig(
-        filename=config["LOGGING"]["file"],
-        level=config["LOGGING"]["level"],
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
-
-    db_init(config["DATABASE"]["username"],
-            config["DATABASE"]["password"],
-            config["DATABASE"]["host"],
-            config["DATABASE"]["port"],
-            config["DATABASE"]["database"])
-
+    """
     artist_repo = ArtistRepo()
     target = "Ed Sheeran"
 
@@ -56,7 +47,7 @@ if __name__ == "__main__":
     artists = artist_repo.get_artists_by_name(target)
     logging.info("Artist(" + target + ") information in the database.")
     logging.debug(artists)
+    """
 
-    server = RPCServer(config["RPCSERVICE"]["host"],
-                       config["RPCSERVICE"]["port"])
+    server = RPCServer(config.rpcserver_host, config.rpcserver_port)
     server.start()
