@@ -1,0 +1,114 @@
+[
+  {
+    "method": "echo",
+    "description": "Echo service",
+    "parameters": [
+      {
+        "name": "data",
+        "type": "str",
+        "description": "The string will return.",
+        "required": true
+      }
+    ]
+  },
+  {
+    "method": "Get Artist",
+    "description": "Get the artist, the albums of the artist and the tracks of the artist's album from the database or the data source. (Default query the data from the database.)",
+    "parameters": [
+      {
+        "name": "artist_name",
+        "type": "str",
+        "description": "The name of artist.",
+        "required": true
+      },
+      {
+        "name": "source",
+        "type": "str",
+        "description": "The source of the data.",
+        "default": "db",
+        "choices": ["db", "spotify"],
+        "required": false
+      }
+    ]
+  },
+  {
+    "method": "Get Artists",
+    "description": "Get the list of artist from database or data source. Should show the index of page and the offset. (Default has 10 artists in the list and query from the database.)",
+    "parameters": [
+      {
+        "name": "index",
+        "type": "int",
+        "description": "The index of page.",
+        "default": 1,
+        "required": false
+      },
+      {
+        "name": "offset",
+        "type": "int",
+        "description": "The number of artist in the page.",
+        "default": 10,
+        "required": false
+      },
+      {
+        "name": "source",
+        "type": "str",
+        "description": "The source of the data.",
+        "default": "db",
+        "choices": ["db", "spotify"],
+        "required": false
+      }
+    ]
+  },
+  {
+    "method": "Get Album",
+    "description": "Get the album and the tracks of the album from the database or the data source. (Default query the data from the database.)",
+    "parameters": [
+      {
+        "name": "album_name",
+        "type": "str",
+        "description": "The name of album.",
+        "required": true
+      },
+      {
+        "name": "source",
+        "type": "str",
+        "description": "The source of the data.",
+        "default": "db",
+        "choices": ["db", "spotify"],
+        "required": false
+      }
+    ]
+  },
+  {
+    "method": "Get Track",
+    "description": "Get the track and the music video link of the track name from the database or the data source. (Default query the data from the database.)",
+    "parameters": [
+      {
+        "name": "track_name",
+        "type": "str",
+        "description": "The name of track.",
+        "required": true
+      },
+      {
+        "name": "source",
+        "type": "str",
+        "description": "The source of the data.",
+        "default": "db",
+        "choices": ["db", "spotify"],
+        "required": false
+      }
+    ]
+  },
+  {
+    "method": "Raw SQL",
+    "description": "Get the result of the raw SQL command.",
+    "parameters": [
+      {
+        "name": "command",
+        "type": "str",
+        "description": "SQL command which is supported by PostgreSQL.",
+        "required": true
+      }
+    ]
+  }
+]
