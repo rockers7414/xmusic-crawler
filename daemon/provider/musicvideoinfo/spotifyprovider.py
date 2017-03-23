@@ -2,7 +2,11 @@ import logging
 import pycurl
 import json
 import configparser
+import sys
+sys.path.append('../../')
 
+from config import Config
+from authorization.spotify import Spotify
 from urllib.parse import urlencode
 try:
     from io import BytesIO
@@ -175,21 +179,20 @@ class SpotifyProvider(MusicVideoInfoProvider):
 
         return tracks
 
-	def getNewRelease(self, offset_count, limit):
-        self.logger.info("Get albums of the new release from Spotify.")
+    def get_new_release_by_album_id(self, offset_count, limit):
         service_host = "https://api.spotify.com"
 
         """
             Get client_id and client_secret value from local.
         """
-        config = configparser.ConfigParser()
-        config.read('../../config.cfg')
-        client_id = config.get('SpotifyParameters', 'ClientID')
-        client_secret = config.get('SpotifyParameters', 'ClientSecret')
+        config = Config("../../xmusic.cfg")
+
+        client_id = config.spotify_client_id
+        client_secret = config.spotify_client_secret
 
         access_token = Spotify(client_id, client_secret).get_token()
         headers = ["Authorization: Bearer " + access_token]
-        
+
         offset = 0
         while offset <= offset_count:
             params = {"offset": offset*limit, "limit": limit}
@@ -199,8 +202,6 @@ class SpotifyProvider(MusicVideoInfoProvider):
             client.setopt(pycurl.HTTPHEADER, headers)
             client.setopt(pycurl.URL, service_host + "/v1/browse/new-releases" + "?" + urlencode(params))
             client.setopt(pycurl.WRITEFUNCTION, buf.write)
-#                 SSL certificate for Windows
-#            client.setopt(pycurl.CAINFO, "C:\python3\curl\ca-bundle.crt")
             client.perform()
             client.close()
             body = json.loads(buf.getvalue().decode("utf-8"))
