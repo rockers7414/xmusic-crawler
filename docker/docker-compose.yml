@@ -27,9 +27,8 @@ services:
         command: python3 xmusic.py
     xmusic-mq:
         container_name: xmusic-mq
-        build:
-            context: .
-            dockerfile: xmusic-mq/Dockerfile
-        image: activemq:xmusic-mq
+        image: webcenter/activemq:latest
+        environment:
+            - ACTIVEMQ_ENABLED_SCHEDULER=true
         ports:
             - 8161:8161
