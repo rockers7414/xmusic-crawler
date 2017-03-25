@@ -1,27 +1,25 @@
 import unittest
-import configparser
-
 import sys
 sys.path.append('../')
+
 from database import db_init
 from database.albumrepo import AlbumRepo
 from database.providerrepo import ProviderRepo
 from database.artistrepo import ArtistRepo
 from database.entity import Album, Artist
+from config import Config
 
 
 class AlbumRepoTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        config = configparser.ConfigParser()
-        config.read("../config.cfg")
-
-        db_init(config["DATABASE"]["username"],
-                config["DATABASE"]["password"],
+        config = Config("../xmusic.cfg")
+        db_init(config.db_username,
+                config.db_password,
                 "localhost",
-                config["DATABASE"]["port"],
-                config["DATABASE"]["database"])
+                config.db_port,
+                config.db_database)
 
         # repo
         self.repo = AlbumRepo()
@@ -72,7 +70,7 @@ class AlbumRepoTestCase(unittest.TestCase):
 
     def test_get_album_by_name(self):
         for data in self.data_list:
-            with self.subTest(data = data):
+            with self.subTest(data=data):
                 album_name = data.name
                 result = self.repo.get_album_by_name(album_name)
                 self.assertIn(data, result)

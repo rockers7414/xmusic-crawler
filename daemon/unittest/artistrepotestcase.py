@@ -1,26 +1,24 @@
 import unittest
-import configparser
-
 import sys
 sys.path.append('../')
+
 from database import db_init
 from database.artistrepo import ArtistRepo
 from database.providerrepo import ProviderRepo
 from database.entity import Artist
+from config import Config
 
 
 class AritstRepoTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        config = configparser.ConfigParser()
-        config.read("../config.cfg")
-
-        db_init(config["DATABASE"]["username"],
-                config["DATABASE"]["password"],
+        config = Config("../xmusic.cfg")
+        db_init(config.db_username,
+                config.db_password,
                 "localhost",
-                config["DATABASE"]["port"],
-                config["DATABASE"]["database"])
+                config.db_port,
+                config.db_database)
 
         # repo
         self.repo = ArtistRepo()
