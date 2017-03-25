@@ -5,7 +5,7 @@ import time
 scheduler = sched.scheduler(time.time, time.sleep)
 
 
-class add_job(object):
+class schedule(object):
 
     def __init__(self, timedelta, repeat=False, args=(), kwargs={}):
         self.logger = logging.getLogger(__name__)

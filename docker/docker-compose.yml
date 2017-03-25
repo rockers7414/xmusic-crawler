@@ -10,12 +10,22 @@ services:
             - POSTGRES_USER=admin
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=xmusic
+    xmusic-mq:
+        container_name: xmusic-mq
+        image: webcenter/activemq:latest
+        environment:
+                - ACTIVEMQ_ENABLED_SCHEDULER=true
+        ports:
+                - 8161:8161
     xmusic-daemon:
         container_name: xmusic-daemon
         build:
             context: .
             dockerfile: xmusic-daemon/Dockerfile
         image: python:xmusic-daemon
+        depends_on:
+            - xmusic-db
+            - xmusic-mq
         links:
             - xmusic-db:xmusic-db
             - xmusic-mq:xmusic-mq
@@ -25,10 +35,3 @@ services:
             - 50000:50000
         working_dir: /var/xmusic
         command: python3 xmusic.py
-    xmusic-mq:
-        container_name: xmusic-mq
-        image: webcenter/activemq:latest
-        environment:
-            - ACTIVEMQ_ENABLED_SCHEDULER=true
-        ports:
-            - 8161:8161

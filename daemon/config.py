@@ -16,7 +16,8 @@ class Config(object):
         logging.basicConfig(
             filename=self.logging_file,
             level=self.logging_level,
-            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            format=("[%(asctime)s][%(levelname)s][%(threadName)s][%(name)s] - "
+                    "%(message)s")
         )
 
     def save(self):
