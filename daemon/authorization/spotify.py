@@ -6,23 +6,23 @@ import json
 
 
 class Spotify:
-
     """
-        To make the API fast for everybody, rate limits apply.
-        Unauthenticated requests are processed at the lowest rate limit.
-        Authenticated requests with a valid access token benefit from higher rate limits
+    To make the API fast for everybody, rate limits apply. Unauthenticated
+    requests are processed at the lowest rate limit. Authenticated requests
+    with a valid access token benefit from higher rate limits
     """
 
     # Spotify Authorize API
     spotify_authorize_url = "https://accounts.spotify.com/api/token"
 
-    def __init__(self, client_id, client_secret, grant_type="client_credentials"):
+    def __init__(self, client_id, client_secret,
+                 grant_type="client_credentials"):
         """
-            Constructor
-            Parameters:
-                client_id - provider by Spotify when register app. (Required)
-                cleint_secret - provider by Spotify when register app. (Required)
-                grant_type - grant type, set it to “client_credentials”. (Optional)
+        Args:
+            client_id (str): Provided by Spotify when register app.
+            cleint_secret (str): Provided by Spotify when register app.
+            grant_type (str, optional): Grant type, set it to
+                "client_credentials".
         """
         self.parameter = {
             "grant_type": grant_type
@@ -46,7 +46,7 @@ class Spotify:
         client.setopt(pycurl.SSL_VERIFYPEER, 0)
         client.perform()
         client.close()
-        
+
         self.response = json.loads(buf.getvalue().decode())
         buf.close()
         self.access_token = self.response.get("access_token")

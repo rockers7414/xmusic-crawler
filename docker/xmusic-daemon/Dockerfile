@@ -6,3 +6,4 @@ RUN pip install pycurl
 RUN pip install isodate
 RUN pip install json-rpc
 RUN pip install stomp.py
+RUN pip install psutil
