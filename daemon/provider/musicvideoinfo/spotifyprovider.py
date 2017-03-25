@@ -1,12 +1,11 @@
 import logging
 import pycurl
 import json
-import configparser
 import sys
 sys.path.append('../../')
-
 from config import Config
 from authorization.spotify import Spotify
+
 from urllib.parse import urlencode
 try:
     from io import BytesIO
@@ -180,13 +179,12 @@ class SpotifyProvider(MusicVideoInfoProvider):
         return tracks
 
     def get_new_release_by_album_id(self, offset_count, limit):
+        self.logger.info("Get albums of the new release from Spotify.")
         service_host = "https://api.spotify.com"
-
         """
             Get client_id and client_secret value from local.
         """
         config = Config("../../xmusic.cfg")
-
         client_id = config.spotify_client_id
         client_secret = config.spotify_client_secret
 
@@ -208,12 +206,19 @@ class SpotifyProvider(MusicVideoInfoProvider):
             buf.close()
 
             new_release = []
-            for artist_data in body["albums"]["items"]:
+            for album_data in body["albums"]["items"]:
                 image = []
-                for image_data in artist_data["images"]:
-                    image.append((image_data["url"], image_data["width"], image_data["height"]))
+                for image_data in album_data["images"]:
+                    image.append((image_data["url"],
+                                  image_data["width"],
+                                  image_data["height"]))
 
-                new_release.append((artist_data["id"], artist_data["type"], image))
+                artists = album_data["artists"][0]
+                artist_data = (artists["name"], artists["id"])
+                new_release.append((album_data["id"],
+                                    album_data["type"],
+                                    artist_data,
+                                    image))
 
             offset += 1
 
