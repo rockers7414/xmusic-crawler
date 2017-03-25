@@ -1,8 +1,6 @@
 import logging
 import uuid
 
-from service.artist import Artist
-from service.datasource import Datasource
 from stomp import Connection, ConnectionListener
 
 
@@ -48,8 +46,6 @@ class MessageListener(ConnectionListener):
     def on_message(self, headers, message):
         try:
             self.logger.info('received a message {}'.format(message))
-            Artist.fetch(message)
-            Datasource.fetch()
             self.conn.ack(headers['message-id'], headers['subscription'])
         except Exception as e:
             self.logger.error(e)

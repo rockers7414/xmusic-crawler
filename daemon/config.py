@@ -101,4 +101,4 @@ class Config(object):
 
     @property
     def mq_num_of_workers(self):
-        return self.__config["ACTIVEMQ"]["num_of_workers"]
+        return int(self.__config["ACTIVEMQ"]["num_of_workers"])
