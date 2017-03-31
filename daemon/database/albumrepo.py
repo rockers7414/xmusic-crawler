@@ -1,7 +1,7 @@
 import logging
 
 from decorator.injectdbsession import inject_db_session
-from .entity import Album, Track
+from .entity import Album
 from sqlalchemy.orm import lazyload
 
 
@@ -9,7 +9,7 @@ from sqlalchemy.orm import lazyload
 class AlbumRepo:
     logger = logging.getLogger(__name__)
 
-    def get_album_by_name(self, album_name):
+    def get_albums_by_name(self, album_name):
         query = self._session.query(Album).options(
             lazyload("tracks.repositories")).filter(Album.name == album_name)
         return query.all()
