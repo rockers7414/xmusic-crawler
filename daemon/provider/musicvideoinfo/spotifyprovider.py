@@ -178,13 +178,14 @@ class SpotifyProvider(MusicVideoInfoProvider):
 
         return tracks
 
-    def get_new_release_by_album_id(self, offset_count, limit):
+    def get_new_release_by_album_id(self):
         self.logger.info("Get albums of the new release from Spotify.")
         service_host = "https://api.spotify.com"
         """
             Get client_id and client_secret value from local.
         """
         config = Config("../../xmusic.cfg")
+        print("1")
         client_id = config.spotify_client_id
         client_secret = config.spotify_client_secret
 
@@ -192,7 +193,9 @@ class SpotifyProvider(MusicVideoInfoProvider):
         headers = ["Authorization: Bearer " + access_token]
 
         offset = 0
-        while offset <= offset_count:
+        limit = 20
+        new_release = []
+        while True:
             params = {"offset": offset*limit, "limit": limit}
             buf = BytesIO()
             client = pycurl.Curl()
@@ -205,7 +208,6 @@ class SpotifyProvider(MusicVideoInfoProvider):
             body = json.loads(buf.getvalue().decode("utf-8"))
             buf.close()
 
-            new_release = []
             for album_data in body["albums"]["items"]:
                 image = []
                 for image_data in album_data["images"]:
@@ -220,6 +222,9 @@ class SpotifyProvider(MusicVideoInfoProvider):
                                     artist_data,
                                     image))
 
-            offset += 1
+            if body["albums"]["total"] > body["albums"]["offset"]:
+                offset = offset + 1
+            else:
+                break
 
         return new_release

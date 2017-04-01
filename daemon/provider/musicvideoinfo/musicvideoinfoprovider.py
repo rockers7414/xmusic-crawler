@@ -14,5 +14,5 @@ class MusicVideoInfoProvider:
     def get_tracks_by_album_id(album_id):
         raise NotImplementedError("get_tracks_by_album_id is not implemented.")
 
-    def get_new_release_by_album_id(offset_count,limit):
+    def get_new_release_by_album_id():
         raise NotImplementedError('get_new_release_by_album_id is not implemented')
