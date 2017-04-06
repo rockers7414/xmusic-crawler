@@ -52,9 +52,20 @@ class serialize(object):
         def wrapper(*args, **kwargs):
             entities = func(*args, **kwargs)
             json_array = []
-            for row in entities:
-                json_str = json.dumps(
-                    row, cls=SqlAlchemyEncoder)
-                json_array.append(json.loads(json_str))
+
+            # print("\n\n")
+            # print(entities.__dict__)
+            # print(hasattr(entities, "fetchall"))
+            # print(entities.fetchall())
+            # print("\n\n")
+
+            # check if return object type is ResultProxy and behavior is INSERT, UPDATE or DELETE.
+            if entities.cursor is None:
+                json_array.append({"Row affected": entities.rowcount})
+            else:
+                for row in entities:
+                    json_str = json.dumps(
+                        row, cls=SqlAlchemyEncoder)
+                    json_array.append(json.loads(json_str))
             return json_array
         return wrapper
