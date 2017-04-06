@@ -28,7 +28,7 @@ class TrackRepoTestCase(unittest.TestCase):
         self.album_repo = AlbumRepo()
         self.artist_repo = ArtistRepo()
 
-        self.provider = ProviderRepo().get_provider("youtube")
+        self.provider = ProviderRepo().get_provider("youtube")[0]
 
         # test data
         self.artist = Artist("obama II", 123)
@@ -69,8 +69,8 @@ class TrackRepoTestCase(unittest.TestCase):
     def test_get_track_by_name(self):
         for data in self.data_list:
             track_name = data.name
-            result = self.repo.get_track_by_name(track_name)
-            self.assertIn(data, result)
+            results = self.repo.get_tracks_by_name(track_name)
+            self.assertIn(data, results)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

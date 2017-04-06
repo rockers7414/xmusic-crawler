@@ -24,7 +24,7 @@ class AritstRepoTestCase(unittest.TestCase):
         self.repo = ArtistRepo()
         self.provider_repo = ProviderRepo()
 
-        self.provider = ProviderRepo().get_provider("youtube")
+        self.provider = ProviderRepo().get_provider("youtube")[0]
 
         # test data
         self.data_list = []
@@ -76,7 +76,7 @@ class AritstRepoTestCase(unittest.TestCase):
         for data in self.data_list:
             artist_name = data.name
             with self.subTest(data=data):
-                result = self.repo.get_artist_by_name(artist_name)
+                result = self.repo.get_artists_by_name(artist_name)
                 self.assertIn(data, result)
 
 

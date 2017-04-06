@@ -26,7 +26,7 @@ class AlbumRepoTestCase(unittest.TestCase):
         self.provider_repo = ProviderRepo()
         self.artist_repo = ArtistRepo()
 
-        self.provider = ProviderRepo().get_provider("youtube")
+        self.provider = ProviderRepo().get_provider("youtube")[0]
 
         # test data
         self.artist = Artist("obama II", 123)
@@ -72,8 +72,8 @@ class AlbumRepoTestCase(unittest.TestCase):
         for data in self.data_list:
             with self.subTest(data=data):
                 album_name = data.name
-                result = self.repo.get_album_by_name(album_name)
-                self.assertIn(data, result)
+                results = self.repo.get_albums_by_name(album_name)
+                self.assertIn(data, results)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
