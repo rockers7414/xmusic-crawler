@@ -27,17 +27,16 @@ class SpotifyProvider(MusicVideoInfoProvider):
     def provider(self, value):
         self._provider = value
 
-    def get_artists_by_name(self, artist_name):
-        self.logger.info("Search the artist({0}) from Spotify."
-                         .format(artist_name))
-
+    def __search(self, keyword, search_type):
         offset = 0
-        artists = []
+        result_key = search_type + "s"
+        result = []
 
         while True:
+            self.logger.info("search " + keyword + ", offset = " + str(offset))
             params = {
-                "q": artist_name,
-                "type": "artist",
+                "q": keyword,
+                "type": search_type,
                 "offset": offset,
                 "limit": 50
             }
@@ -54,36 +53,73 @@ class SpotifyProvider(MusicVideoInfoProvider):
             body = json.loads(buf.getvalue().decode("utf-8"))
             buf.close()
 
-            if body["artists"]["total"] > 0:
-                for artist_data in body["artists"]["items"]:
-                    artist = Artist(
-                        artist_data["name"], artist_data["popularity"])
+            if body[result_key]["total"] > 0:
+                for data in body[result_key]["items"]:
+                    result.append(data)
 
-                    images = []
-                    for image_data in artist_data["images"]:
-                        images.append(Image(image_data["url"],
-                                            image_data["width"],
-                                            image_data["height"]))
-
-                    genres = []
-                    for genre in artist_data["genres"]:
-                        genres.append(Genre(genre))
-
-                    artist.images = images
-                    artist.genres = genres
-
-                    artist.provider = self._provider
-                    artist.provider_res_id = artist_data["id"]
-
-                    self.logger.info(artist)
-                    artists.append(artist)
-
-            if body["artists"]["total"] > body["artists"]["limit"]:
+            if body[result_key]["total"] > \
+                    body[result_key]["limit"] * (offset + 1):
                 offset = offset + 1
             else:
                 break
 
+        self.logger.info("Done")
+        return result
+
+    def get_artists_by_name(self, artist_name):
+        self.logger.info("Search the artist({0}) from Spotify."
+                         .format(artist_name))
+
+        result = self.__search(artist_name, "artist")
+        artists = []
+        for data in result:
+            artist = Artist(data["name"], data["popularity"])
+
+            images = []
+            for image_data in data["images"]:
+                images.append(Image(image_data["url"],
+                                    image_data["width"],
+                                    image_data["height"]))
+
+            genres = []
+            for genre in data["genres"]:
+                genres.append(Genre(genre))
+
+            artist.images = images
+            artist.genres = genres
+
+            artist.provider = self._provider
+            artist.provider_res_id = data["id"]
+
+            self.logger.info(artist)
+            artists.append(artist)
+
         return artists
+
+    def get_albums_by_name(self, album_name):
+        self.logger.info("Search the album({0}) from Spotify."
+                         .format(album_name))
+
+        result = self.__search(album_name, "album")
+        albums = []
+        for data in result:
+            album = Album(data["name"], None)
+
+            images = []
+            for image_data in data["images"]:
+                images.append(Image(image_data["url"],
+                                    image_data["width"],
+                                    image_data["height"]))
+
+            album.images = images
+
+            album.provider = self._provider
+            album.provider_res_id = data["id"]
+
+            self.logger.info(album)
+            albums.append(album)
+
+        return albums
 
     def get_albums_by_artist_id(self, artist_id):
         self.logger.info("Get albums of the artist(" +
@@ -129,12 +165,24 @@ class SpotifyProvider(MusicVideoInfoProvider):
 
                     albums.append(album)
 
-            if body["total"] > body["limit"]:
+            if body["total"] > body["limit"] * (offset + 1):
                 offset = offset + 1
             else:
                 break
 
         return albums
+
+    def get_tracks_by_name(self, track_name):
+        self.logger.info("Search the track({0}) from Spotify."
+                         .format(track_name))
+
+        result = self.__search(track_name, "track")
+        tracks = []
+
+        for data in result:
+            tracks.append(Track(data["name"], None, data["track_number"]))
+
+        return tracks
 
     def get_tracks_by_album_id(self, album_id):
         self.logger.info("Get tracks of the album(" +
@@ -167,7 +215,7 @@ class SpotifyProvider(MusicVideoInfoProvider):
                     tracks.append(
                         Track(data["name"], None, data["track_number"]))
 
-            if body["total"] > body["limit"]:
+            if body["total"] > body["limit"] * (offset + 1):
                 offset = offset + 1
             else:
                 break

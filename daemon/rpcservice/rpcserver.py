@@ -38,21 +38,21 @@ def get_artists(index=1, offset=10, source=DataSourceType.DataBase.value):
 @dispatcher.add_method
 def get_artist(artist_name=None, source=DataSourceType.DataBase.value):
     service = service_factory(source)
-    result = service.get_artist_by_name(artist_name)
+    result = service.get_artists_by_name(artist_name)
     return result
 
 
 @dispatcher.add_method
 def get_album(album_name, source=DataSourceType.DataBase.value):
     service = service_factory(source)
-    result = service.get_album_by_name(album_name)
+    result = service.get_albums_by_name(album_name)
     return result
 
 
 @dispatcher.add_method
 def get_track(track_name, source=DataSourceType.DataBase.value):
     service = service_factory(source)
-    result = service.get_track(track_name)
+    result = service.get_tracks(track_name)
     return result
 
 
