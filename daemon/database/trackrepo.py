@@ -1,14 +1,14 @@
 import logging
 
 from decorator.injectdbsession import inject_db_session
-from .entity import Track, Repository
+from .entity import Track
 
 
 @inject_db_session()
 class TrackRepo:
     logger = logging.getLogger(__name__)
 
-    def get_track_by_name(self, track_name):
+    def get_tracks_by_name(self, track_name):
         query = self._session.query(Track).filter(Track.name == track_name)
         return query.all()
 

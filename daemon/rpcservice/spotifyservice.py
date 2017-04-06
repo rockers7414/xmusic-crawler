@@ -14,11 +14,11 @@ class SpotifyService(RPCService):
         else:
             pass
 
-    def get_artist_by_name(self, artist_name):
+    def get_artists_by_name(self, artist_name):
         pass
 
-    def get_album_by_name(self, album_name):
+    def get_albums_by_name(self, album_name):
         pass
 
-    def get_track(self, track_name):
+    def get_tracks(self, track_name):
         pass
