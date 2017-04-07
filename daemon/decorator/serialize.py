@@ -53,14 +53,12 @@ class serialize(object):
             entities = func(*args, **kwargs)
             json_array = []
 
-            # print("\n\n")
-            # print(entities.__dict__)
-            # print(hasattr(entities, "fetchall"))
-            # print(entities.fetchall())
-            # print("\n\n")
+            # check if object is ResultProxy
+            cursor = None
+            if hasattr(entities, "cursor"):
+                cursor = entities.cursor
 
-            # check if return object type is ResultProxy and behavior is INSERT, UPDATE or DELETE.
-            if entities.cursor is None:
+            if type(entities) != list and cursor is None:
                 json_array.append({"Row affected": entities.rowcount})
             else:
                 for row in entities:
