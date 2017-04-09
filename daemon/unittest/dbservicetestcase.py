@@ -5,8 +5,10 @@ import sys
 sys.path.append('../')
 from database import db_init
 from database.artistrepo import ArtistRepo
+from database.albumrepo import AlbumRepo
+from database.trackrepo import TrackRepo
 from database.providerrepo import ProviderRepo
-from database.entity import Artist
+from database.entity import Artist, Album, Track
 
 from config import Config
 from rpcservice.dbservice import DBService
@@ -28,23 +30,97 @@ class DBServiceTestCase(unittest.TestCase):
         except:
             self.fail()
 
-    def test_get_artists(self):
+    def test_get_albums(self):
         try:
-            # artists init data
-            self.artist = Artist("obama II", 123)
-            self.artist.provider = self.provider
-            self.artist.provider_res_id = "res_id_1"
-            self.artist = ArtistRepo().save(self.artist)
+            # artists test data
+            artist = Artist("obama II", 123)
+            artist.provider = self.provider
+            artist.provider_res_id = "res_id_1"
+            artist = ArtistRepo().save(artist)
+            # album test data
+            album = Album("Feel Good", 10000)
+            album.provider = self.provider
+            album.provider_res_id = "res_id"
+            album.artist_id = artist.artist_id
+            album = AlbumRepo().save(album)
 
             # test case 1
-            result = DBService().get_artists()
-            # .... !!!! ~~~~~~~~~~~~
-
-            # self.assertIn(self.artist, result)
-            # print(result)
+            results = DBService().get_albums_by_name("Feel Good")
+            is_contain = False
+            for result in results:
+                if result.get("name") == "Feel Good" and int(result.get("popularity")) == 10000 and result.get("artist_id") == artist.artist_id:
+                    is_contain = True
+            self.assertEqual(is_contain, True)
 
             # clean data
-            ArtistRepo().delete(self.artist)
+            AlbumRepo().delete(album)
+            ArtistRepo().delete(artist)
+        except:
+            self.fail()
+
+    def test_get_tracks(self):
+        try:
+             # artists test data
+            artist = Artist("obama II", 123)
+            artist.provider = self.provider
+            artist.provider_res_id = "res_id_1"
+            artist = ArtistRepo().save(artist)
+            # album test data
+            album = Album("Feel Good", 10000)
+            album.provider = self.provider
+            album.provider_res_id = "res_id"
+            album.artist_id = artist.artist_id
+            album = AlbumRepo().save(album)
+            # track test data
+            track = Track("happy", 1999, 1)
+            track.album_id = album.album_id
+            track = TrackRepo().save(track)
+
+            # test case 1
+            results = DBService().get_tracks("happy")
+            is_contain = False
+            for result in results:
+                if result.get("name") == "happy" and int(result.get("popularity")) == 1999 and int(result.get("track_number")) == 1:
+                    is_contain = True
+            self.assertEqual(is_contain, True)
+
+            # clean data
+            TrackRepo().delete(track)
+            AlbumRepo().delete(album)
+            ArtistRepo().delete(artist)
+        except:
+            self.fail()
+
+        pass
+
+    def test_get_artists(self):
+        try:
+            # artists test data
+            artist = Artist("obama II", 123)
+            artist.provider = self.provider
+            artist.provider_res_id = "res_id_1"
+            artist = ArtistRepo().save(artist)
+
+            # test case 1
+            results = DBService().get_artists()
+            is_contain = False
+            for result in results:
+                if result.get("name") == "obama II" and int(result.get("popularity")) == 123:
+                    is_contain = True
+
+            self.assertEqual(is_contain, True)
+
+            # test case 2
+            results = DBService().get_artists_by_name("obama II")
+            is_contain = False
+            for result in results:
+                if result.get("name") == "obama II" and int(result.get("popularity")) == 123:
+                    is_contain = True
+
+            self.assertEqual(is_contain, True)
+
+            # clean data
+            ArtistRepo().delete(artist)
         except:
             self.fail()
 
@@ -114,7 +190,6 @@ class DBServiceTestCase(unittest.TestCase):
 
     def tearDown(self):
         try:
-            # delete artist
             pass
         except:
             self.fail()
