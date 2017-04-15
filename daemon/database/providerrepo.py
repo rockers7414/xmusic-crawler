@@ -2,6 +2,7 @@ import logging
 
 from database.entity import Provider, Repository, Track
 from decorator.injectdbsession import inject_db_session
+from sqlalchemy.orm import lazyload
 
 
 @inject_db_session()
@@ -9,7 +10,10 @@ class ProviderRepo(object):
     logger = logging.getLogger(__name__)
 
     def get_provider(self, name):
-        return Provider(name)
+        # return Provider("spotify")
+        query = self._session.query(Provider).options(lazyload("*")) \
+            .filter(Provider.name == name)
+        return query.all()
 
     def get_unfetched_tracks_by_provider(self, provider):
         query = self._session.query(Track).join(Track.album).filter(
