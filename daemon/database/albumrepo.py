@@ -19,6 +19,15 @@ class AlbumRepo:
             self._session.add(album)
             self._session.flush()
             self._session.commit()
+            return album
+        except:
+            self._session.rollback()
+            raise
+
+    def delete(self, album):
+        try:
+            self._session.delete(album)
+            self._session.commit()
         except:
             self._session.rollback()
             raise

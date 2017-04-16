@@ -17,6 +17,15 @@ class TrackRepo:
             self._session.add(track)
             self._session.flush()
             self._session.commit()
+            return track
+        except:
+            self._session.rollback()
+            raise
+
+    def delete(self, track):
+        try:
+            self._session.delete(track)
+            self._session.commit()
         except:
             self._session.rollback()
             raise

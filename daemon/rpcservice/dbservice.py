@@ -28,6 +28,11 @@ class DBService(RPCService):
         return TrackRepo().get_tracks_by_name(track_name)
 
     def raw_sql(self, sql):
-        session = Session()
-        result = session.execute(sql)
-        return result
+        try:
+            session = Session()
+            result = session.execute(sql)
+            session.flush()
+            session.commit()
+            return result
+        except:
+            session.rollback()

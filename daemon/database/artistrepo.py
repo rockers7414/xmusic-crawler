@@ -29,6 +29,15 @@ class ArtistRepo:
             self._session.add(artist)
             self._session.flush()
             self._session.commit()
+            return artist
+        except:
+            self._session.rollback()
+            raise
+
+    def delete(self, artist):
+        try:
+            self._session.delete(artist)
+            self._session.commit()
         except:
             self._session.rollback()
             raise
