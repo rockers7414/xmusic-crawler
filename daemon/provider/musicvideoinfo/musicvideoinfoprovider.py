@@ -1,3 +1,4 @@
+
 class MusicVideoInfoProvider:
     def get_artists_by_name(artist_name):
         raise NotImplementedError("get_artists_by_name is not implemented.")
@@ -18,3 +19,6 @@ class MusicVideoInfoProvider:
 
     def get_tracks_by_name(track_name):
         raise NotImplementedError("get_tracks_by_name is not implemented.")
+
+    def get_new_release_albums():
+        raise NotImplementedError("get_new_release_album is not implemented.")
