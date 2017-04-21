@@ -13,7 +13,7 @@ class ProviderRepo(object):
         # return Provider("spotify")
         query = self._session.query(Provider).options(lazyload("*")) \
             .filter(Provider.name == name)
-        return query.all()
+        return query.first()
 
     def get_unfetched_tracks_by_provider(self, provider):
         query = self._session.query(Track).join(Track.album).filter(

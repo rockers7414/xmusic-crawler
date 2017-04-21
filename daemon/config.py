@@ -1,10 +1,13 @@
+from decorator.singleton import singleton
+
 import configparser
 import logging
 
 
+@singleton()
 class Config(object):
 
-    def __init__(self, config_file):
+    def __init__(self, config_file="xmusic.cfg"):
         self.__config_file = config_file
 
         self.__config = configparser.ConfigParser()

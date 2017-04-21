@@ -1,8 +1,3 @@
-import logging
-import pycurl
-import json
-import sys
-sys.path.append('../../')
 from config import Config
 from authorization.spotify import Spotify
 
@@ -14,6 +9,10 @@ except ImportError:
 
 from database.entity import Artist, Album, Track, Image, Genre
 from .musicvideoinfoprovider import MusicVideoInfoProvider
+
+import logging
+import pycurl
+import json
 
 
 class SpotifyProvider(MusicVideoInfoProvider):
@@ -226,14 +225,13 @@ class SpotifyProvider(MusicVideoInfoProvider):
 
         return tracks
 
-    def get_new_release_by_album_id(self):
+    def get_new_release_albums(self):
         self.logger.info("Get albums of the new release from Spotify.")
         service_host = "https://api.spotify.com"
         """
             Get client_id and client_secret value from local.
         """
-        config = Config("../../xmusic.cfg")
-        print("1")
+        config = Config()
         client_id = config.spotify_client_id
         client_secret = config.spotify_client_secret
 
@@ -241,36 +239,48 @@ class SpotifyProvider(MusicVideoInfoProvider):
         headers = ["Authorization: Bearer " + access_token]
 
         offset = 0
-        limit = 20
         new_release = []
         while True:
-            params = {"offset": offset*limit, "limit": limit}
+            params = {
+                "offset": offset,
+                "limit": 50
+            }
+
             buf = BytesIO()
+
             client = pycurl.Curl()
             client.setopt(pycurl.HEADER, False)
             client.setopt(pycurl.HTTPHEADER, headers)
-            client.setopt(pycurl.URL, service_host + "/v1/browse/new-releases" + "?" + urlencode(params))
+            client.setopt(pycurl.URL, service_host +
+                          "/v1/browse/new-releases" + "?" + urlencode(params))
             client.setopt(pycurl.WRITEFUNCTION, buf.write)
             client.perform()
             client.close()
+
             body = json.loads(buf.getvalue().decode("utf-8"))
             buf.close()
 
-            for album_data in body["albums"]["items"]:
-                image = []
-                for image_data in album_data["images"]:
-                    image.append((image_data["url"],
-                                  image_data["width"],
-                                  image_data["height"]))
+            if body["albums"]["total"] > 0:
+                for data in body["albums"]["items"]:
+                    album = Album(data["name"], None)
 
-                artists = album_data["artists"][0]
-                artist_data = (artists["name"], artists["id"])
-                new_release.append((album_data["id"],
-                                    album_data["type"],
-                                    artist_data,
-                                    image))
+                    images = []
+                    for image_data in data["images"]:
+                        images.append(Image(image_data["url"],
+                                            image_data["width"],
+                                            image_data["height"]))
 
-            if body["albums"]["total"] > body["albums"]["offset"]:
+                    album.images = images
+
+                    album.provider = self._provider
+                    album.provider_res_id = data["id"]
+
+                    artist_id = data["artists"][0]["id"] \
+                        if len(data["artists"]) > 0 else ""
+                    new_release.append((artist_id, album))
+
+            if body["albums"]["total"] \
+                    > body["albums"]["limit"] * (offset + 1):
                 offset = offset + 1
             else:
                 break
