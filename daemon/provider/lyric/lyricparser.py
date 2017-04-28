@@ -26,11 +26,12 @@ class LyricParser():
         client = pycurl.Curl()
         client.setopt(client.URL, url)
         client.setopt(client.WRITEFUNCTION, buf.write)
+        client.setopt(pycurl.CONNECTTIMEOUT, 30)
         client.perform()
 
         data = None
         if client.getinfo(pycurl.HTTP_CODE) == self.HTTP_OK:
-            data = buf.getvalue()
+            data = buf.getvalue().decode()
 
         client.close()
         buf.close()
@@ -39,16 +40,16 @@ class LyricParser():
     def gen_search_url(self, artist_name, track_name):
         raise NotImplementedError("gen_search_url is not implemented")
 
-    def search_url_parse(self):
+    def search_url_parse(self, page_data):
         raise NotImplementedError("search_url_parse is not implemented")
 
     def gen_result_url(self, artist_name, track_name):
         raise NotImplementedError("gen_result_url is not implemented")
 
-    def result_url_parse(self):
+    def result_url_parse(self, page_data):
         raise NotImplementedError("result_url_parse is not implemented")
 
-    def etl_result(self):
+    def etl_result(self, result):
         raise NotImplementedError("etl is not implemented")
 
     def get_lyric(self):
