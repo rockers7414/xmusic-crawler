@@ -1,3 +1,4 @@
+import json
 from .lyricparser import LyricParser
 from decorator.singleton import singleton
 from html.parser import HTMLParser
@@ -9,17 +10,32 @@ class MetroProvider(LyricParser):
      # metro result url
     __metro_lyrics_url = "http://www.metrolyrics.com/{track_name}-lyrics-{artist_name}.html"
     # metro search api
-    __metro_lyrics_search_url = "http://www.metrolyrics.com/search.html?search={keyword}"
+    # __metro_lyrics_search_url = "http://www.metrolyrics.com/search.html?search={track_name} {artist_name}"
+    __metro_lyrics_search_url = "http://api.metrolyrics.com/v1/multisearch/all/X-API-KEY/196f657a46afb63ce3fd2015b9ed781280337ea7/format/json?find={track_name} {artist_name}"
 
     def __init__(self):
         LyricParser.__init__(self, self.__metro_lyrics_url,
                              self.__metro_lyrics_search_url)
 
     def gen_search_url(self, artist_name, track_name):
-        raise NotImplementedError("gen_search_url is not implemented")
+        artist_name = artist_name.strip().replace(" ", "-")
+        track_name = track_name.strip().replace(" ", "-")
+        return self.__metro_lyrics_search_url.format(track_name=track_name, artist_name=artist_name)
 
     def search_url_parse(self, page_data):
-        raise NotImplementedError("search_url_parse is not implemented")
+        # parser = MetroSearchHTMLParser()
+        # parser.feed(page_data)
+        # return parser.get_result()
+        print("==================")
+        jsonObj = json.loads(page_data)
+        # print(jsonObj["results"]["songs"])
+        extract_data = jsonObj["results"]["songs"]["d"]
+        # for index in range(0..len(extract_data)):
+            # print(extract_data[index]["u"])
+
+
+        print(str(extract_data))
+        return page_data
 
     def gen_result_url(self, artist_name, track_name):
         artist_name = artist_name.strip().replace(" ", "-")
@@ -40,6 +56,10 @@ class MetroProvider(LyricParser):
 
 
 class MetroResultHTMLParser(HTMLParser):
+
+    """
+        For parse result page.
+    """
 
     # container
     __target_container = "div"

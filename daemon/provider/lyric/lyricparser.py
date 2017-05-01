@@ -26,7 +26,8 @@ class LyricParser():
         client = pycurl.Curl()
         client.setopt(client.URL, url)
         client.setopt(client.WRITEFUNCTION, buf.write)
-        client.setopt(pycurl.CONNECTTIMEOUT, 30)
+        client.setopt(client.VERBOSE, True)
+        # client.setopt(pycurl.CONNECTTIMEOUT, 30)
         client.perform()
 
         data = None
