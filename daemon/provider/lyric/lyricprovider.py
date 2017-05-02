@@ -1,4 +1,5 @@
 from .metroprovider import MetroProvider
+from .geniusprovider import GeniusProvider
 
 
 class LyricProvider:
@@ -9,32 +10,34 @@ class LyricProvider:
         for provider in providers:
             # gen result url
             result_url = provider.gen_result_url(artist_name, track_name)
-
             # request result url
             page_data = provider.request(result_url)
 
             if page_data is not None:
-
                 # parse html and etl data
                 result = provider.result_url_parse(page_data)
-
                 # etl
                 etl_data = provider.etl_result(result)
 
                 return etl_data
             elif page_data is None:
-                
+
                 # gen search url
                 search_url = provider.gen_search_url(artist_name, track_name)
-
                 # request search result
                 search_page_data = provider.request(search_url)
-
                 # parse search data and get url list
                 result_url_list = provider.search_url_parse(search_page_data)
 
-                print(result_url_list)
+                if result_url_list is not None:
+                    for url in result_url_list:
+                        _page_data = provider.request(url)
+                        result = provider.result_url_parse(_page_data)
+                        etl_data = provider.etl_result(result)
+                        if etl_data is not None:
+                            return etl_data
+
         return None
 
     def __get_providers(self):
-        return {MetroProvider()}
+        return {GeniusProvider(), MetroProvider()}
