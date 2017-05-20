@@ -1,5 +1,5 @@
 import json
-from .lyricparser import LyricParser
+from provider.lyric.lyricparser import LyricParser
 from decorator.singleton import singleton
 
 
