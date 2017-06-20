@@ -11,7 +11,7 @@ class MetroProvider(LyricParser):
     # metro result url
     __metro_lyrics_url = "http://www.metrolyrics.com/{track_name}-lyrics-{artist_name}.html"
     # metro search api
-    __metro_lyrics_search_url = "http://api.metrolyrics.com/v1/multisearch/all/X-API-KEY/196f657a46afb63ce3fd2015b9ed781280337ea7/format/json?find={artist_name}-{track_name}"
+    __metro_lyrics_search_url = "http://api.metrolyrics.com/v1/multisearch/all/format/json?find={artist_name}-{track_name}"
 
     # parse html parameters
     __target_container = "div"

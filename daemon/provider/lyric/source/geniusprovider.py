@@ -14,7 +14,7 @@ class GeniusProvider(LyricParser):
     __genius_lyrics_search_url = "https://genius.com/search?q={artist_name}-{track_name}"
 
     # parse html parameters
-    __target_container = "lyrics"
+    __target_container = "div"
     __target_attr = "class"
     __target_attr_value = "lyrics"
 

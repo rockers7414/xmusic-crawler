@@ -34,8 +34,7 @@ class LyricParser():
         client.setopt(pycurl.SSL_VERIFYPEER, 0)
         client.setopt(
             pycurl.USERAGENT, "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36")
-        # client.setopt(pycurl.CONNECTTIMEOUT, 30)
-        # client.setopt(client.VERBOSE, True)
+        client.setopt(client.VERBOSE, True)
         client.perform()
 
         data = None
